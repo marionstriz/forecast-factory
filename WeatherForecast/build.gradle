@@ -1,8 +1,9 @@
 plugins {
     id 'java'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
-group 'org.example'
+group 'org.mazu'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -10,10 +11,22 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation 'com.sun.jersey:jersey-client:1.19.4'
+    implementation 'com.sun.jersey:jersey-json:1.19.4'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'io.rest-assured:rest-assured:5.2.0'
+    testImplementation 'org.assertj:assertj-core:3.23.1'
+    testImplementation 'org.mockito:mockito-core:4.8.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
 }
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = 'app.Main'
 }
