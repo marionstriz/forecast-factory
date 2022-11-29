@@ -26,7 +26,9 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
+/*
 application {
     mainClass = 'app.Main'
 }
+
+ */
