@@ -1,10 +1,8 @@
 plugins {
+    id 'application'
     id 'java'
     id 'com.adarshr.test-logger' version '3.2.0'
 }
-
-group 'org.mazu'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -25,4 +23,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = 'app.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'app.Main'
+    }
 }
