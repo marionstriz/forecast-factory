@@ -14,5 +14,4 @@ public class CurrentWeatherDto {
     private CoordinatesDto coordinates;
     @JsonProperty("main")
     private WeatherInfoDto weatherInfoDto;
-
 }
