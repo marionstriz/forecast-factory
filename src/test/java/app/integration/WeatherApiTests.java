@@ -39,4 +39,12 @@ public class WeatherApiTests {
     public void currentWeatherDto_HasWeatherInfo() {
         assertThat(currentWeatherDto.getWeatherInfoDto()).isNotNull();
     }
+
+    @Test
+    public void currentWeatherDto_HasTemperatureWithinRealisticCelsiusLimits() {
+        // uses highest/lowest recorded temperature values plus a few degrees.
+        double currentTemp = currentWeatherDto.getWeatherInfoDto().getTemp();
+        assertThat(currentTemp).isLessThan(60);
+        assertThat(currentTemp).isGreaterThan(-90);
+    }
 }
