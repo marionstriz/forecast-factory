@@ -1,4 +1,4 @@
-package app.api;
+package app.smoke;
 
 import org.junit.jupiter.api.Test;
 

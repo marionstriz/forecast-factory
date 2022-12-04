@@ -4,8 +4,10 @@ import app.api.WeatherApi;
 import app.dto.CurrentWeatherDto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class WeatherApiTests {
 
@@ -46,5 +48,33 @@ public class WeatherApiTests {
         double currentTemp = currentWeatherDto.getWeatherInfoDto().getTemp();
         assertThat(currentTemp).isLessThan(60);
         assertThat(currentTemp).isGreaterThan(-90);
+    }
+
+    @Test
+    public void givenCityNameWithWhitespace_WhenGettingCurrentWeatherDto_ContainsCityNameWithoutWhitespace() {
+        String inputCity = "   Tallinn    ";
+        CurrentWeatherDto currentWeatherDto = weatherApi.getCurrentWeatherDtoAboutCity(inputCity);
+
+        String expectedCity = "Tallinn";
+        assertThat(currentWeatherDto.getCity()).isEqualTo(expectedCity);
+    }
+
+    @Test
+    public void givenNonExistentCity_WhenGettingCurrentWeatherDto_ThrowsIllegalArgumentException() {
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> weatherApi.getCurrentWeatherDtoAboutCity("Deathstar"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"       ", "", " \t \n \t\t "})
+    public void givenEmptyString_WhenGettingCurrentWeatherDto_ThrowsIllegalArgumentException(String input) {
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> weatherApi.getCurrentWeatherDtoAboutCity(input));
+    }
+
+    @Test
+    public void givenNull_WhenGettingCurrentWeatherDto_ThrowsIllegalArgumentException() {
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> weatherApi.getCurrentWeatherDtoAboutCity(null));
     }
 }
