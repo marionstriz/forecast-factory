@@ -4,7 +4,7 @@ import app.api.WeatherApi;
 import app.domain.MainDetails;
 import app.dto.CoordinatesDto;
 import app.dto.CurrentWeatherDto;
-import app.weather.MainDetailsHandler;
+import app.weather.CurrentWeatherHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MainDetailsHandlerTests {
+public class CurrentWeatherHandlerTests {
 
     @Mock
     private static WeatherApi weatherApi;
@@ -26,7 +26,7 @@ public class MainDetailsHandlerTests {
     @BeforeAll
     public static void Initialize() {
         String city = "Tokyo";
-        mainDetails = new MainDetailsHandler(weatherApi).getMainDetailsAboutCity(city);
+        mainDetails = new CurrentWeatherHandler(weatherApi).getCityWeatherReport(city).getMainDetails();
 
         CurrentWeatherDto currentWeatherDtoStub = new CurrentWeatherDto();
         currentWeatherDtoStub.setCity(city);

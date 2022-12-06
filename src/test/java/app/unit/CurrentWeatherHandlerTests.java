@@ -1,11 +1,11 @@
 package app.unit;
 
-import app.domain.CurrentWeatherReport;
-import app.domain.MainDetails;
+import app.domain.CityWeatherReport;
 import app.weather.CurrentWeatherHandler;
-import app.weather.MainDetailsHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -15,15 +15,15 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 
 public class CurrentWeatherHandlerTests {
 
-    private CurrentWeatherHandler currentWeatherHandler;
-    private CurrentWeatherReport currentWeatherReport;
+    private static CurrentWeatherHandler currentWeatherHandler;
+    private static CityWeatherReport cityWeatherReport;
 
     @BeforeAll
-    public void Initialize() {
+    public static void Initialize() {
         currentWeatherHandler = new CurrentWeatherHandler();
 
         String city = "Manila";
-        currentWeatherReport = currentWeatherHandler.getCurrentWeatherReport(city);
+        cityWeatherReport = currentWeatherHandler.getCityWeatherReport(city);
     }
 
     @Test
@@ -42,6 +42,38 @@ public class CurrentWeatherHandlerTests {
     public void givenNull_GetDateInStringFormat_ThrowsIllegalArgumentException() {
         assertThatIllegalArgumentException().isThrownBy(
                 () -> currentWeatherHandler.getDateInStringFormat(null));
+    }
+
+    @Test
+    public void WhenGivenCoordinatesAsDoubles_GetStringFormatCoordinates_GivesCoordinatesInCorrectFormat() {
+        double givenLat = 59.345987;
+        double givenLon = 103.12378;
+
+        assertThat(currentWeatherHandler.getStringFormatCoordinates(givenLat, givenLon)).isEqualTo("59.34,103.12");
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {-150, 150})
+    public void GivenTooHighOrTooLowLatitude_GetStringFormatCoordinates_ThrowsIllegalArgumentException(double givenLat) {
+        double givenLon = -95.12378;
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> currentWeatherHandler.getStringFormatCoordinates(givenLat, givenLon));
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {-190, 230})
+    public void GivenTooHighOrTooLowLongitude_GetStringFormatCoordinates_ThrowsIllegalArgumentException(double givenLon) {
+        double givenLat = 13.986;
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> currentWeatherHandler.getStringFormatCoordinates(givenLat, givenLon));
+    }
+
+    @Test
+    public void GetMainDetails_ReturnsMainDetails_WithCelsiusAsTempUnit() {
+        String expectedUnit = "Celsius";
+        assertThat(cityWeatherReport.getMainDetails().getTemperatureUnit()).isEqualTo(expectedUnit);
     }
 
 }

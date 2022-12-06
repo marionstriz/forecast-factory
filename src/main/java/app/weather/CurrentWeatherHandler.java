@@ -1,7 +1,7 @@
 package app.weather;
 
 import app.api.WeatherApi;
-import app.domain.CurrentWeatherReport;
+import app.domain.CityWeatherReport;
 
 import java.util.Date;
 
@@ -17,11 +17,15 @@ public class CurrentWeatherHandler {
         this.weatherApi = weatherApi;
     }
 
-    public CurrentWeatherReport getCurrentWeatherReport(String city) {
-        return new CurrentWeatherReport();
+    public CityWeatherReport getCityWeatherReport(String city) {
+        return new CityWeatherReport();
     }
 
     public String getDateInStringFormat(Date date) {
+        return "";
+    }
+
+    public String getStringFormatCoordinates(double lat, double lon) {
         return "";
     }
 }

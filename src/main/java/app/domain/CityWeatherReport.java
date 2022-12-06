@@ -1,6 +1,9 @@
 package app.domain;
 
-public class FullWeatherReport {
+import lombok.Data;
+
+@Data
+public class CityWeatherReport {
 
     private MainDetails mainDetails;
     private CurrentWeatherReport currentWeatherReport;
