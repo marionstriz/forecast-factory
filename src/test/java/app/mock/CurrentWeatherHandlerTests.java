@@ -26,7 +26,6 @@ public class CurrentWeatherHandlerTests {
     @BeforeAll
     public static void Initialize() {
         String city = "Tokyo";
-        mainDetails = new CurrentWeatherHandler(weatherApi).getCityWeatherReport(city).getMainDetails();
 
         CurrentWeatherDto currentWeatherDtoStub = new CurrentWeatherDto();
         currentWeatherDtoStub.setCity(city);
@@ -37,17 +36,25 @@ public class CurrentWeatherHandlerTests {
         currentWeatherDtoStub.setCoordinates(coordinatesDtoStub);
 
         when(weatherApi.getCurrentWeatherDtoAboutCity(anyString())).thenReturn(currentWeatherDtoStub);
+
+        mainDetails = new CurrentWeatherHandler(weatherApi).getCityWeatherReport(city).getMainDetails();
     }
 
     @Test
-    public void givenCityName_getWeatherReport_ShouldReturDetailsWithCityName() {
+    public void givenCityName_getWeatherReport_ShouldReturDetails_WithCityName() {
         String expectedCity = "Tokyo";
         assertThat(mainDetails.getCity()).isEqualTo(expectedCity);
     }
 
     @Test
-    public void givenCityName_getMainDetails_ShouldReturnDetailsWithCoordinates() {
+    public void givenCityName_getMainDetails_ShouldReturnDetails_WithCoordinates() {
         String expectedCoordinates = "35.69,139.69";
         assertThat(mainDetails.getCoordinates()).isEqualTo(expectedCoordinates);
+    }
+
+    @Test
+    public void givenCityName_getMainDetails_ShouldReturnDetails_WithCelsiusAsUnit() {
+        String expectedUnit = "Celsius";
+        assertThat(mainDetails.getTemperatureUnit()).isEqualTo(expectedUnit);
     }
 }

@@ -23,6 +23,11 @@ public class WeatherApiTests {
     }
 
     @Test
+    public void currentWeatherDto_IsNotNull() {
+        assertThat(currentWeatherDto).isNotNull();
+    }
+
+    @Test
     public void currentWeatherDto_ContainsCityName() {
         String expectedCity = "Tallinn";
         assertThat(currentWeatherDto.getCity()).isEqualTo(expectedCity);
@@ -48,6 +53,18 @@ public class WeatherApiTests {
         double currentTemp = currentWeatherDto.getWeatherInfoDto().getTemp();
         assertThat(currentTemp).isLessThan(60);
         assertThat(currentTemp).isGreaterThan(-90);
+    }
+
+    @Test
+    public void currentWeatherDto_HasPressureNotDefaultValue() {
+        double currentPressure = currentWeatherDto.getWeatherInfoDto().getPressure();
+        assertThat(currentPressure).isNotZero();
+    }
+
+    @Test
+    public void currentWeatherDto_HasHumidityNotDefaultValue() {
+        double currentHumidity = currentWeatherDto.getWeatherInfoDto().getHumidity();
+        assertThat(currentHumidity).isNotZero();
     }
 
     @Test
