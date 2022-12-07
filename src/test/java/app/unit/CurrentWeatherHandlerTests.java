@@ -31,14 +31,8 @@ public class CurrentWeatherHandlerTests {
     public void WhenGivenDate_GetDateInStringFormat_ShouldReturnInCorrectFormat() {
         String expectedStringDate = "30-12-2022";
         Date date = new GregorianCalendar(2022, Calendar.DECEMBER, 30).getTime();
-
-        assertThat(currentWeatherHandler.getDateInStringFormat(date)).isEqualTo(expectedStringDate);
-    }
-
-    @Test
-    public void givenNull_GetDateInStringFormat_ThrowsIllegalArgumentException() {
-        assertThatIllegalArgumentException().isThrownBy(
-                () -> currentWeatherHandler.getDateInStringFormat(null));
+        assertThat(currentWeatherHandler.getDateFromMillisInStringFormat(date.getTime()/1000))
+                .isEqualTo(expectedStringDate);
     }
 
     @Test
