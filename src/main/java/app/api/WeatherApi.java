@@ -1,6 +1,7 @@
 package app.api;
 
 import app.dto.CurrentWeatherDto;
+import app.dto.ForecastDto;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -37,5 +38,9 @@ public class WeatherApi {
         }
 
         return response.getEntity(CurrentWeatherDto.class);
+    }
+
+    public ForecastDto getForecastDtoAboutCity(String city) {
+        return new ForecastDto();
     }
 }
