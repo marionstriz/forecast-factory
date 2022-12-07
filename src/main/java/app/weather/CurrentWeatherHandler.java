@@ -10,7 +10,6 @@ import app.dto.WeatherInfoDto;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 
 public class CurrentWeatherHandler {
@@ -33,8 +32,7 @@ public class CurrentWeatherHandler {
     }
 
     private CurrentWeatherReport getCurrentWeatherFromDto(CurrentWeatherDto dto){
-        Date date = Date.from(Instant.now());
-        String dateString = getDateInStringFormat(date);
+        String dateString = getDateFromMillisInStringFormat(dto.getUtcMillis());
         WeatherInfoDto weatherInfoDto = dto.getWeatherInfoDto();
 
         return new CurrentWeatherReport(
@@ -51,10 +49,8 @@ public class CurrentWeatherHandler {
         return new MainDetails(dto.getCity(), coords, "Celsius");
     }
 
-    public String getDateInStringFormat(Date date) {
-        if (date == null){
-            throw new IllegalArgumentException("Date cannot be null");
-        }
+    public String getDateFromMillisInStringFormat(long millis) {
+        Date date = new Date(millis*1000);
         String pattern = "dd-MM-yyyy";
         DateFormat format = new SimpleDateFormat(pattern);
         return format.format(date);
