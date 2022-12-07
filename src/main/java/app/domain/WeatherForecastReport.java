@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrentWeatherReport {
-    private String date;
-    private double temperature;
-    private int pressure;
-    private int humidity;
+public class WeatherForecastReport {
+    List<WeatherReport> forecast;
 }

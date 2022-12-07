@@ -1,8 +1,9 @@
 package app.unit;
 
 import app.domain.CityWeatherReport;
-import app.domain.CurrentWeatherReport;
+import app.domain.WeatherReport;
 import app.domain.MainDetails;
+import app.domain.WeatherReportDetails;
 import app.weather.WeatherReportMachine;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +25,9 @@ public class WeatherReportMachineTests {
     public static void Initialize() {
         weatherReportMachine = new WeatherReportMachine();
         MainDetails mainDetails = new MainDetails("Oslo", "33.31,45.21", "Celsius");
-        CurrentWeatherReport currentWeatherReport = new CurrentWeatherReport("01-12-2022", 10, 30, 50);
-        cityWeatherReport = new CityWeatherReport(mainDetails, currentWeatherReport);
+        WeatherReport weatherReport = new WeatherReport("01-12-2022",
+                new WeatherReportDetails(10, 30, 50));
+        cityWeatherReport = new CityWeatherReport(mainDetails, weatherReport);
     }
 
     @Test
@@ -59,7 +61,7 @@ public class WeatherReportMachineTests {
     public void weatherReportJson_HasSameCurrentWeather_AsOriginalReport() throws JsonProcessingException {
         String json = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
         CityWeatherReport reportFromJson = new ObjectMapper().readValue(json, CityWeatherReport.class);
-        assertThat(reportFromJson.getCurrentWeatherReport())
-                .isEqualTo(cityWeatherReport.getCurrentWeatherReport());
+        assertThat(reportFromJson.getWeatherReport())
+                .isEqualTo(cityWeatherReport.getWeatherReport());
     }
 }

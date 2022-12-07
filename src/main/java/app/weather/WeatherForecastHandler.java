@@ -3,6 +3,10 @@ package app.weather;
 import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.dto.ForecastDto;
+import app.dto.WeatherInfoDto;
+
+import java.util.List;
+import java.util.Map;
 
 public class WeatherForecastHandler {
 
@@ -10,11 +14,15 @@ public class WeatherForecastHandler {
         return null;
     }
 
-    private WeatherReport calculateOneDayReport(ForecastDto dto){
+    public WeatherReport calculateOneDayReport(List<WeatherInfoDto> weatherInfoDtos){
         return null;
     }
 
-    private String getDateInCorrectStringFormat(String date){
+    public Map<String, WeatherInfoDto> filterWeatherInfoDtosToMapByDate(ForecastDto dto){
+        return null;
+    }
+
+    public String getDateInCorrectStringFormat(String date){
         return "";
     }
 }

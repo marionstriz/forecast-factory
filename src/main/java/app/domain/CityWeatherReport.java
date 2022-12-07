@@ -3,6 +3,7 @@ package app.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.codehaus.jackson.annotate.JsonUnwrapped;
 
 @Data
 @NoArgsConstructor
@@ -10,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class CityWeatherReport {
 
     private MainDetails mainDetails;
-    private CurrentWeatherReport currentWeatherReport;
+    @JsonUnwrapped
+    private WeatherReport weatherReport;
 }
