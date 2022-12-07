@@ -4,27 +4,27 @@ import app.api.WeatherApi;
 import app.domain.MainDetails;
 import app.dto.CoordinatesDto;
 import app.dto.CurrentWeatherDto;
+import app.dto.WeatherInfoDto;
 import app.weather.CurrentWeatherHandler;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CurrentWeatherHandlerTests {
 
     @Mock
-    private static WeatherApi weatherApi;
+    private WeatherApi weatherApi;
 
-    private static MainDetails mainDetails;
+    private MainDetails mainDetails;
 
-    @BeforeAll
-    public static void Initialize() {
+    @BeforeEach
+    public void Initialize() {
         String city = "Tokyo";
 
         CurrentWeatherDto currentWeatherDtoStub = new CurrentWeatherDto();
@@ -34,8 +34,9 @@ public class CurrentWeatherHandlerTests {
         coordinatesDtoStub.setLon(139.6917);
         coordinatesDtoStub.setLat(35.6895);
         currentWeatherDtoStub.setCoordinates(coordinatesDtoStub);
+        currentWeatherDtoStub.setWeatherInfoDto(new WeatherInfoDto());
 
-        when(weatherApi.getCurrentWeatherDtoAboutCity(anyString())).thenReturn(currentWeatherDtoStub);
+        Mockito.when(weatherApi.getCurrentWeatherDtoAboutCity(city)).thenReturn(currentWeatherDtoStub);
 
         mainDetails = new CurrentWeatherHandler(weatherApi).getCityWeatherReport(city).getMainDetails();
     }
