@@ -16,6 +16,9 @@ public class WeatherApi {
     private static final String API_KEY = "e23d88c1cc9bfd0f5580776f36688fbb";
 
     public CurrentWeatherDto getCurrentWeatherDtoAboutCity(String city) {
+        if (city == null || city.isBlank()) {
+            throw new IllegalArgumentException("City name cannot be empty or null");
+        }
         String resourceURL = BASE_URL + "/weather";
 
         ClientConfig config = new DefaultClientConfig();
@@ -28,6 +31,10 @@ public class WeatherApi {
                 .queryParam("appid", API_KEY)
                 .queryParam("units", "metric")
                 .get(ClientResponse.class);
+
+        if (response.getStatus() == 404){
+            throw new IllegalArgumentException("Not a real city >:( : " + city);
+        }
 
         return response.getEntity(CurrentWeatherDto.class);
     }
