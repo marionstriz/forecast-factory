@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class CurrentWeatherHandler {
 
-    private WeatherApi weatherApi;
+    private final WeatherApi weatherApi;
 
     public CurrentWeatherHandler() {
         weatherApi = new WeatherApi();
@@ -29,29 +29,26 @@ public class CurrentWeatherHandler {
         CurrentWeatherDto dto = weatherApi.getCurrentWeatherDtoAboutCity(city);
         MainDetails mainDetails = getMainDetailsFromDto(dto);
         CurrentWeatherReport currentWeatherReport = getCurrentWeatherFromDto(dto);
-        CityWeatherReport cityWeatherReport = new CityWeatherReport(mainDetails, currentWeatherReport);
-        return cityWeatherReport;
+        return new CityWeatherReport(mainDetails, currentWeatherReport);
     }
 
     private CurrentWeatherReport getCurrentWeatherFromDto(CurrentWeatherDto dto){
         Date date = Date.from(Instant.now());
         String dateString = getDateInStringFormat(date);
         WeatherInfoDto weatherInfoDto = dto.getWeatherInfoDto();
-        CurrentWeatherReport currentWeatherReport = new CurrentWeatherReport(
+
+        return new CurrentWeatherReport(
                 dateString,
                 weatherInfoDto.getTemp(),
                 weatherInfoDto.getPressure(),
                 weatherInfoDto.getHumidity());
-
-        return currentWeatherReport;
     }
 
     private MainDetails getMainDetailsFromDto(CurrentWeatherDto dto){
         CoordinatesDto coordsDto = dto.getCoordinates();
         String coords = getStringFormatCoordinates(coordsDto.getLat(), coordsDto.getLon());
-        MainDetails mainDetails = new MainDetails(dto.getCity(), coords, "Celsius");
 
-        return mainDetails;
+        return new MainDetails(dto.getCity(), coords, "Celsius");
     }
 
     public String getDateInStringFormat(Date date) {
@@ -64,6 +61,9 @@ public class CurrentWeatherHandler {
     }
 
     public String getStringFormatCoordinates(double lat, double lon) {
+        if (lat < -90 || lat > 90 || lon < -180 || lon > 180){
+            throw new IllegalArgumentException("Invalid coordinates");
+        }
         return String.format("%.2f,%.2f", lat, lon);
     }
 }

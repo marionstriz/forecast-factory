@@ -46,7 +46,7 @@ public class CurrentWeatherHandlerTests {
         double givenLat = 59.345987;
         double givenLon = 103.12378;
 
-        assertThat(currentWeatherHandler.getStringFormatCoordinates(givenLat, givenLon)).isEqualTo("59.34,103.12");
+        assertThat(currentWeatherHandler.getStringFormatCoordinates(givenLat, givenLon)).isEqualTo("59.35,103.12");
     }
 
     @ParameterizedTest
