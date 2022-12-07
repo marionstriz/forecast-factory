@@ -19,16 +19,13 @@ public class WeatherReportMachineTests {
 
     private static WeatherReportMachine weatherReportMachine;
     private static CityWeatherReport cityWeatherReport;
-    private static CityWeatherReport reportFromJson;
+
     @BeforeAll
-    public static void Initialize() throws JsonProcessingException {
+    public static void Initialize() {
         weatherReportMachine = new WeatherReportMachine();
         MainDetails mainDetails = new MainDetails("Oslo", "33.31,45.21", "Celsius");
         CurrentWeatherReport currentWeatherReport = new CurrentWeatherReport("01-12-2022", 10, 30, 50);
         cityWeatherReport = new CityWeatherReport(mainDetails, currentWeatherReport);
-
-        String json = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
-        reportFromJson = new ObjectMapper().readValue(json, CityWeatherReport.class);
     }
 
     @Test
@@ -51,13 +48,17 @@ public class WeatherReportMachineTests {
     }
 
     @Test
-    public void weatherReportJson_HasSameMainDetailsAsOriginalReport(){
+    public void weatherReportJson_HasSameMainDetailsAsOriginalReport() throws JsonProcessingException {
+        String json = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
+        CityWeatherReport reportFromJson = new ObjectMapper().readValue(json, CityWeatherReport.class);
         assertThat(reportFromJson.getMainDetails())
                 .isEqualTo(cityWeatherReport.getMainDetails());
     }
 
     @Test
-    public void weatherReportJson_HasSameCurrentWeather_AsOriginalReport(){
+    public void weatherReportJson_HasSameCurrentWeather_AsOriginalReport() throws JsonProcessingException {
+        String json = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
+        CityWeatherReport reportFromJson = new ObjectMapper().readValue(json, CityWeatherReport.class);
         assertThat(reportFromJson.getCurrentWeatherReport())
                 .isEqualTo(cityWeatherReport.getCurrentWeatherReport());
     }
