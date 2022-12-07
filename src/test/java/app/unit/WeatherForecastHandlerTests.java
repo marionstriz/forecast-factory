@@ -1,5 +1,6 @@
 package app.unit;
 
+import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.dto.ForecastDto;
 import app.dto.RangeForecastDto;
@@ -52,22 +53,24 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenGivenWeatherInfoDtosOfSameDate_CalculatesAverageTempCorrectlyForOneWeatherReport() {
-        Double temp = weatherReport.getDetails().getTemperature();
-        assertThat(temp).isEqualTo(5);
+        Double AverageTemp = weatherReport.getDetails().getTemperature();
+        Double expectedAverageTemp = 5.0;
+        assertThat(AverageTemp).isEqualTo(expectedAverageTemp);
     }
 
     @Test
     public void WhenGivenWeatherInfoDtosOfSameDate_CalculatesAveragePressureCorrectlyForOneWeatherReport() {
-        int pressure = weatherReport.getDetails().getPressure();
-        assertThat(pressure).isEqualTo(185);
+        int AveragePressure = weatherReport.getDetails().getPressure();
+        int expectedAveragePressure = 185;
+        assertThat(AveragePressure).isEqualTo(expectedAveragePressure);
     }
 
     @Test
     public void WhenGivenWeatherInfoDtosOfSameDate_CalculatesAverageHumidityCorrectlyForOneWeatherReport() {
-        int humidity = weatherReport.getDetails().getHumidity();
-        assertThat(humidity).isEqualTo(10);
+        int averageHumidity = weatherReport.getDetails().getHumidity();
+        int expectedHumidityAverage = 10;
+        assertThat(averageHumidity).isEqualTo(expectedHumidityAverage);
     }
-
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_GetsResultOfThreeKeyAndValuePairs() {
