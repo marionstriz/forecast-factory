@@ -17,15 +17,10 @@ public class WeatherApi {
     private static final String API_KEY = "e23d88c1cc9bfd0f5580776f36688fbb";
 
     public CurrentWeatherDto getCurrentWeatherDtoAboutCity(String city) {
-        if (city == null || city.isBlank()) {
-            throw new IllegalArgumentException("City name cannot be empty or null");
-        }
-        String resourceURL = BASE_URL + "/weather";
+        cityValidator(city);
 
-        ClientConfig config = new DefaultClientConfig();
-        config.getClasses().add(JacksonJaxbJsonProvider.class);
-        config.getFeatures().put(FEATURE_POJO_MAPPING, true);
-        Client client = create(config);
+        String resourceURL = BASE_URL + "/weather";
+        Client client = getClient();
 
         ClientResponse response = client.resource(resourceURL)
                 .queryParam("q", city)
@@ -33,14 +28,46 @@ public class WeatherApi {
                 .queryParam("units", "metric")
                 .get(ClientResponse.class);
 
-        if (response.getStatus() == 404){
-            throw new IllegalArgumentException("Not a real city >:( : " + city);
-        }
+        checkIfResponseIs404(city, response);
 
         return response.getEntity(CurrentWeatherDto.class);
     }
 
-    public ForecastDto getForecastDtoAboutCity(String city) {
-        return new ForecastDto();
+    private static void checkIfResponseIs404(String city, ClientResponse response) {
+        if (response.getStatus() == 404){
+            throw new IllegalArgumentException("Not a real city >:( : " + city);
+        }
     }
+
+    private static Client getClient() {
+        ClientConfig config = new DefaultClientConfig();
+        config.getClasses().add(JacksonJaxbJsonProvider.class);
+        config.getFeatures().put(FEATURE_POJO_MAPPING, true);
+        return create(config);
+    }
+
+
+    public ForecastDto getForecastDtoAboutCity(String city) {
+        cityValidator(city);
+
+        String resourceURL = BASE_URL + "/forecast";
+        Client client = getClient();
+
+        ClientResponse response = client.resource(resourceURL)
+                .queryParam("q", city)
+                .queryParam("appid", API_KEY)
+                .queryParam("units", "metric")
+                .get(ClientResponse.class);
+
+        checkIfResponseIs404(city, response);
+
+        return response.getEntity(ForecastDto.class);
+    }
+    private static void cityValidator(String city) {
+        if (city == null || city.isBlank()) {
+            throw new IllegalArgumentException("City name cannot be empty or null");
+        }
+    }
+
+
 }
