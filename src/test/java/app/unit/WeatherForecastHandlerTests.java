@@ -1,6 +1,5 @@
 package app.unit;
 
-import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.dto.ForecastDto;
 import app.dto.RangeForecastDto;
@@ -25,19 +24,21 @@ public class WeatherForecastHandlerTests {
     public static void Initialize() {
         weatherForecastHandler = new WeatherForecastHandler();
 
+        forecastDto = new ForecastDto();
+
         forecastDto.setRangeForecastDtos(List.of(
-                new RangeForecastDto("2-11-2022",
+                new RangeForecastDto("02-11-2022",
                         new WeatherInfoDto(17, 1000, 50)),
-                new RangeForecastDto("2-11-2022",
+                new RangeForecastDto("03-11-2022",
                         new WeatherInfoDto(20, 1003, 35)),
-                new RangeForecastDto("3-11-2022",
+                new RangeForecastDto("04-11-2022",
                         new WeatherInfoDto(20, 1002, 40)),
-                new RangeForecastDto("4-11-2022",
+                new RangeForecastDto("05-11-2022",
                         new WeatherInfoDto(25, 1000, 40))));
 
         List<WeatherInfoDto> weatherInfoDtos = List.of(
                 new WeatherInfoDto(2, 100, 10),
-                new WeatherInfoDto(9, 150, 5),
+                new WeatherInfoDto(9, 200, 5),
                 new WeatherInfoDto(4, 120, 15));
 
         weatherReport = weatherForecastHandler.calculateOneDayReport(weatherInfoDtos);
@@ -45,45 +46,47 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenGivenDate_GetDateInStringFormat_ShouldReturnInCorrectFormat() {
+        String date = "2022-12-30 15:00:00";
+
+        String actualDate = weatherForecastHandler.getDateInCorrectStringFormat(date);
         String expectedStringDate = "30-12-2022";
-        String date = "2022-12-12 15:00:00";
-        assertThat(weatherForecastHandler.getDateInCorrectStringFormat(date))
-                .isEqualTo(expectedStringDate);
+
+        assertThat(actualDate).isEqualTo(expectedStringDate);
     }
 
     @Test
     public void WhenGivenWeatherInfoDtosOfSameDate_CalculatesAverageTempCorrectlyForOneWeatherReport() {
-        Double AverageTemp = weatherReport.getDetails().getTemperature();
+        Double actualAverageTemp = weatherReport.getDetails().getTemperature();
         Double expectedAverageTemp = 5.0;
-        assertThat(AverageTemp).isEqualTo(expectedAverageTemp);
+        assertThat(actualAverageTemp).isEqualTo(expectedAverageTemp);
     }
 
     @Test
     public void WhenGivenWeatherInfoDtosOfSameDate_CalculatesAveragePressureCorrectlyForOneWeatherReport() {
-        int AveragePressure = weatherReport.getDetails().getPressure();
-        int expectedAveragePressure = 185;
-        assertThat(AveragePressure).isEqualTo(expectedAveragePressure);
+        int actualAveragePressure = weatherReport.getDetails().getPressure();
+        int expectedAveragePressure = 140;
+        assertThat(actualAveragePressure).isEqualTo(expectedAveragePressure);
     }
 
     @Test
     public void WhenGivenWeatherInfoDtosOfSameDate_CalculatesAverageHumidityCorrectlyForOneWeatherReport() {
-        int averageHumidity = weatherReport.getDetails().getHumidity();
+        int actualAverageHumidity = weatherReport.getDetails().getHumidity();
         int expectedHumidityAverage = 10;
-        assertThat(averageHumidity).isEqualTo(expectedHumidityAverage);
+        assertThat(actualAverageHumidity).isEqualTo(expectedHumidityAverage);
     }
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_GetsResultOfThreeKeyAndValuePairs() {
-        Map<String, WeatherInfoDto> map
+        Map<String, List<WeatherInfoDto>> map
                 = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDto);
-        assertThat(map).hasSize(3);
+        assertThat(map).hasSize(4);
     }
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_HasCorrectKeysInMap() {
-        Map<String, WeatherInfoDto> map
+        Map<String, List<WeatherInfoDto>> map
                 = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDto);
-        assertThat(map).containsKeys("2-11-2022", "3-11-2022", "4-11-2022");
+        assertThat(map).containsKeys("02-11-2022", "03-11-2022", "04-11-2022", "05-11-2022");
     }
 
 }
