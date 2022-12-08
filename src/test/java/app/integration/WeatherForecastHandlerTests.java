@@ -38,19 +38,11 @@ public class WeatherForecastHandlerTests {
         assertThat(forecast.size()).isEqualTo(3);
     }
 
-    @Test
-    public void givenCityName_FirstWeatherReportInForecastIsNotNull() {
-        assertThat(forecast.get(0)).isNotNull();
-    }
 
-    @Test
-    public void givenCityName_SecondWeatherReportInForecastIsNotNull() {
-        assertThat(forecast.get(1)).isNotNull();
-    }
-
-    @Test
-    public void givenCityName_ThirdWeatherReportInForecastIsNotNull() {
-        assertThat(forecast.get(2)).isNotNull();
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2})
+    public void givenCityName_getWeatherForecastReport_WeatherReportInForecastIsNotNull(int index) {
+        assertThat(forecast.get(index)).isNotNull();
     }
 
     @Test
