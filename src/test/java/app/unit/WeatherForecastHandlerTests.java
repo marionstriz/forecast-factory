@@ -7,6 +7,8 @@ import app.dto.WeatherInfoDto;
 import app.weather.WeatherForecastHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 import java.util.Map;
@@ -15,31 +17,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WeatherForecastHandlerTests {
     private static WeatherForecastHandler weatherForecastHandler;
-
-    private static ForecastDto forecastDto;
-
     private static WeatherReport weatherReport;
+    private static Map<String, List<WeatherInfoDto>> forecastMap;
 
     @BeforeAll
     public static void Initialize() {
         weatherForecastHandler = new WeatherForecastHandler();
 
-        forecastDto = new ForecastDto();
+        ForecastDto forecastDto = new ForecastDto();
 
         forecastDto.setRangeForecastDtos(List.of(
-                new RangeForecastDto("02-11-2022",
+                new RangeForecastDto("02-11-2022 03:00:00",
                         new WeatherInfoDto(17, 1000, 50)),
-                new RangeForecastDto("03-11-2022",
+                new RangeForecastDto("02-11-2022 06:00:00",
                         new WeatherInfoDto(20, 1003, 35)),
-                new RangeForecastDto("04-11-2022",
+                new RangeForecastDto("03-11-2022 12:00:00",
                         new WeatherInfoDto(20, 1002, 40)),
-                new RangeForecastDto("05-11-2022",
+                new RangeForecastDto("04-11-2022 15:00:00",
                         new WeatherInfoDto(25, 1000, 40))));
 
         List<WeatherInfoDto> weatherInfoDtos = List.of(
                 new WeatherInfoDto(2, 100, 10),
                 new WeatherInfoDto(9, 200, 5),
                 new WeatherInfoDto(4, 120, 15));
+
+        forecastMap = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDto);
 
         weatherReport = weatherForecastHandler.calculateOneDayReport(weatherInfoDtos);
     }
@@ -77,16 +79,22 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_GetsResultOfThreeKeyAndValuePairs() {
-        Map<String, List<WeatherInfoDto>> map
-                = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDto);
-        assertThat(map).hasSize(4);
+        assertThat(forecastMap).hasSize(4);
     }
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_HasCorrectKeysInMap() {
-        Map<String, List<WeatherInfoDto>> map
-                = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDto);
-        assertThat(map).containsKeys("02-11-2022", "03-11-2022", "04-11-2022", "05-11-2022");
+        assertThat(forecastMap).containsKeys("02-11-2022", "03-11-2022", "04-11-2022");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "02-11-2022, 2",
+            "03-11-2022, 1",
+            "04-11-2022, 1"
+    })
+    public void WhenGivenForecastDto_FilterToMapByDate_HasCorrectNumberOfRangeForecasts(String key, int listSize) {
+        assertThat(forecastMap.get(key)).hasSize(listSize);
     }
 
 }

@@ -18,7 +18,7 @@ public class WeatherForecastHandler {
         return null;
     }
 
-    public Map<String, WeatherInfoDto> filterWeatherInfoDtosToMapByDate(ForecastDto dto){
+    public Map<String, List<WeatherInfoDto>> filterWeatherInfoDtosToMapByDate(ForecastDto dto){
         return null;
     }
 
