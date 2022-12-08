@@ -1,12 +1,8 @@
 package app.unit;
 
-import app.domain.CityWeatherReport;
-import app.domain.WeatherReport;
-import app.domain.MainDetails;
-import app.domain.WeatherReportDetails;
+import app.domain.*;
 import app.weather.WeatherReportMachine;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,17 +47,22 @@ public class WeatherReportMachineTests {
 
     @Test
     public void weatherReportJson_HasSameMainDetailsAsOriginalReport() throws JsonProcessingException {
-        String json = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
-        CityWeatherReport reportFromJson = new ObjectMapper().readValue(json, CityWeatherReport.class);
-        assertThat(reportFromJson.getMainDetails())
-                .isEqualTo(cityWeatherReport.getMainDetails());
-    }
+        String actualJson = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
 
-    @Test
-    public void weatherReportJson_HasSameCurrentWeather_AsOriginalReport() throws JsonProcessingException {
-        String json = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
-        CityWeatherReport reportFromJson = new ObjectMapper().readValue(json, CityWeatherReport.class);
-        assertThat(reportFromJson.getWeatherReport())
-                .isEqualTo(cityWeatherReport.getWeatherReport());
+        String expectedJsonReport = """
+                {
+                  "mainDetails" : {
+                    "city" : "Oslo",
+                    "coordinates" : "33.31,45.21",
+                    "temperatureUnit" : "Celsius"
+                  },
+                  "weatherReport" : {
+                    "date" : "01-12-2022",
+                    "temperature" : 10.0,
+                    "pressure" : 30,
+                    "humidity" : 50
+                  }
+                }""";
+        assertThat(actualJson).isEqualTo(expectedJsonReport);
     }
 }
