@@ -1,5 +1,6 @@
 package app.weather;
 
+import app.api.WeatherApi;
 import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.dto.ForecastDto;
@@ -9,6 +10,17 @@ import java.util.List;
 import java.util.Map;
 
 public class WeatherForecastHandler {
+
+    private final WeatherApi weatherApi;
+
+    public WeatherForecastHandler() {
+        weatherApi = new WeatherApi();
+    }
+
+    public WeatherForecastHandler(WeatherApi weatherApi) {
+        this.weatherApi = weatherApi;
+    }
+
 
     public WeatherForecastReport getWeatherForecastReport(String city) {
         return null;
