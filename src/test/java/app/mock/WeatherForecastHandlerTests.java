@@ -33,16 +33,20 @@ public class WeatherForecastHandlerTests {
         ForecastDto forecastDtoStub = new ForecastDto();
 
         forecastDtoStub.setRangeForecastDtos(List.of(
-                new RangeForecastDto("07-12-2022 03:00:00",
+                new RangeForecastDto("2022-12-07 03:00:00",
                         new WeatherInfoDto(16, 1000, 50)),
-                new RangeForecastDto("07-12-2022 06:00:00",
+                new RangeForecastDto("2022-12-07 06:00:00",
                         new WeatherInfoDto(20, 1004, 36)),
-                new RangeForecastDto("08-12-2022 12:00:00",
+                new RangeForecastDto("2022-12-08 12:00:00",
                         new WeatherInfoDto(20, 1002, 40)),
-                new RangeForecastDto("08-12-2022 15:00:00",
+                new RangeForecastDto("2022-12-08 15:00:00",
                         new WeatherInfoDto(26, 1000, 40)),
-                new RangeForecastDto("09-12-2022 15:00:00",
-                        new WeatherInfoDto(25, 1000, 44))));
+                new RangeForecastDto("2022-12-09 15:00:00",
+                        new WeatherInfoDto(24, 1003, 46)),
+                new RangeForecastDto("2022-12-10 15:00:00",
+                        new WeatherInfoDto(25, 1020, 49)),
+                new RangeForecastDto("2022-12-11 15:00:00",
+                        new WeatherInfoDto(29, 1090, 50))));
 
         Mockito.when(weatherApi.getForecastDtoAboutCity(city)).thenReturn(forecastDtoStub);
 
@@ -61,8 +65,8 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"18, 0",
-                "23, 1" ,
+    @CsvSource({"23, 0",
+                "24, 1" ,
                 "25, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectTempValue(double expected, int index) {
         double temperatureInReport = weatherForecastReport.getForecast().get(index).getDetails().getTemperature();
@@ -71,9 +75,9 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"1002, 0",
-            "1001, 1" ,
-            "1000, 2"})
+    @CsvSource({"1001, 0",
+            "1003, 1" ,
+            "1020, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectPressureValue(double expected, int index) {
         double pressureInReport = weatherForecastReport.getForecast().get(index).getDetails().getPressure();
 
@@ -81,9 +85,9 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"68, 0",
-            "40, 1" ,
-            "44, 2"})
+    @CsvSource({"40, 0",
+            "46, 1" ,
+            "49, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectHumidityValue(double expected, int index) {
         double humidityInReport = weatherForecastReport.getForecast().get(index).getDetails().getHumidity();
 
@@ -93,9 +97,9 @@ public class WeatherForecastHandlerTests {
 
     @ParameterizedTest
     @CsvSource({
-            "07-12-2022, 0",
-            "08-12-2022, 1",
-            "09-12-2022, 2"
+            "08-12-2022, 0",
+            "09-12-2022, 1",
+            "10-12-2022, 2"
     })
     public void givenCityName_getWeatherForecastReport_ReportsAreSortedCorrectly(String expectedDate, int index) {
         WeatherReport oneDayReport = weatherForecastReport.getForecast().get(index);
