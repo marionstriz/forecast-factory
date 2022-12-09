@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,4 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 public class WeatherForecastReport {
     List<WeatherReport> forecast;
+
+    public void addWeatherReportToList(WeatherReport report){
+        if(forecast == null){
+            forecast = new ArrayList<>();
+        }
+
+        forecast.add(report);
+    }
 }
