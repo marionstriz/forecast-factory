@@ -16,11 +16,16 @@ public class WeatherApi {
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5";
     private static final String API_KEY = "e23d88c1cc9bfd0f5580776f36688fbb";
 
+    private final Client client;
+
+    public WeatherApi() {
+        client = createClient();
+    }
+
     public CurrentWeatherDto getCurrentWeatherDtoAboutCity(String city) {
         cityValidator(city);
 
         String resourceURL = BASE_URL + "/weather";
-        Client client = getClient();
 
         ClientResponse response = client.resource(resourceURL)
                 .queryParam("q", city)
@@ -39,19 +44,17 @@ public class WeatherApi {
         }
     }
 
-    private static Client getClient() {
+    private static Client createClient() {
         ClientConfig config = new DefaultClientConfig();
         config.getClasses().add(JacksonJaxbJsonProvider.class);
         config.getFeatures().put(FEATURE_POJO_MAPPING, true);
         return create(config);
     }
 
-
     public ForecastDto getForecastDtoAboutCity(String city) {
         cityValidator(city);
 
         String resourceURL = BASE_URL + "/forecast";
-        Client client = getClient();
 
         ClientResponse response = client.resource(resourceURL)
                 .queryParam("q", city)
@@ -68,6 +71,4 @@ public class WeatherApi {
             throw new IllegalArgumentException("City name cannot be empty or null");
         }
     }
-
-
 }
