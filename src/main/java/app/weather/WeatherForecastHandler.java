@@ -1,7 +1,6 @@
 package app.weather;
 
 import app.api.WeatherApi;
-import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.domain.WeatherReportDetails;
 import app.dto.ForecastDto;
@@ -23,27 +22,27 @@ public class WeatherForecastHandler {
     }
 
 
-    public WeatherForecastReport getWeatherForecastReport(String city) {
+    public List<WeatherReport> getWeatherForecastReport(String city) {
         ForecastDto forecastDto = weatherApi.getForecastDtoAboutCity(city);
         Map<String, List<WeatherInfoDto>> weatherInfoDtoMap = filterWeatherInfoDtosToMapByDate(forecastDto);
-        WeatherForecastReport weatherForecastReport = new WeatherForecastReport();
 
-        return extractThreeDayReportFromMap(weatherInfoDtoMap, weatherForecastReport);
+        return extractThreeDayReportFromMap(weatherInfoDtoMap);
     }
 
-    private WeatherForecastReport extractThreeDayReportFromMap(Map<String, List<WeatherInfoDto>> weatherInfoDtoMap, WeatherForecastReport weatherForecastReport) {
+    private List<WeatherReport> extractThreeDayReportFromMap(Map<String, List<WeatherInfoDto>> weatherInfoDtoMap) {
+        List<WeatherReport> forecast = new ArrayList<>();
         int counter = 0;
         for (Map.Entry<String, List<WeatherInfoDto>> map : weatherInfoDtoMap.entrySet()) {
             if(counter > 0 && counter <= 3){
                 WeatherReportDetails details = calculateOneDayReportDetails(map.getValue());
                 WeatherReport report = new WeatherReport(map.getKey(), details);
-                weatherForecastReport.addWeatherReportToList(report);
+                forecast.add(report);
                 counter++;
                 continue;
             }
             counter++;
         }
-        return weatherForecastReport;
+        return forecast;
     }
 
 

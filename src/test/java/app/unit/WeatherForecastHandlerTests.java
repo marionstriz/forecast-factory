@@ -1,6 +1,5 @@
 package app.unit;
 
-import app.domain.WeatherReport;
 import app.domain.WeatherReportDetails;
 import app.dto.ForecastDto;
 import app.dto.RangeForecastDto;
@@ -12,7 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WeatherForecastHandlerTests {
     private static WeatherForecastHandler weatherForecastHandler;
     private static WeatherReportDetails weatherReportDetails;
-    private static LinkedHashMap<String, List<WeatherInfoDto>> forecastMap;
+    private static Map<String, List<WeatherInfoDto>> forecastMap;
 
     @BeforeAll
     public static void Initialize() {

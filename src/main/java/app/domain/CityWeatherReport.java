@@ -1,14 +1,18 @@
 package app.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class CityWeatherReport {
 
+    @NonNull
     private MainDetails mainDetails;
+    @NonNull
     private WeatherReport weatherReport;
+    List<WeatherReport> forecastReport;
 }

@@ -1,7 +1,6 @@
 package app.mock;
 
 import app.api.WeatherApi;
-import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.dto.*;
 import app.weather.WeatherForecastHandler;
@@ -24,7 +23,7 @@ public class WeatherForecastHandlerTests {
     @Mock
     private WeatherApi weatherApi;
 
-    private WeatherForecastReport weatherForecastReport;
+    private List<WeatherReport> weatherForecast;
 
     @BeforeEach
     public void Initialize() {
@@ -50,18 +49,18 @@ public class WeatherForecastHandlerTests {
 
         Mockito.when(weatherApi.getForecastDtoAboutCity(city)).thenReturn(forecastDtoStub);
 
-        weatherForecastReport = new WeatherForecastHandler(weatherApi).getWeatherForecastReport(city);
+        weatherForecast = new WeatherForecastHandler(weatherApi).getWeatherForecastReport(city);
     }
 
     @Test
     public void givenCityName_getWeatherForecastReport_ShouldReturnForecastOfThreeDays() {
-        assertThat(weatherForecastReport.getForecast().size()).isEqualTo(3);
+        assertThat(weatherForecast.size()).isEqualTo(3);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     public void givenCityName_getWeatherForecastReport_WeatherReportInForecastIsNotNull(int index) {
-        assertThat(weatherForecastReport.getForecast().get(index)).isNotNull();
+        assertThat(weatherForecast.get(index)).isNotNull();
     }
 
     @ParameterizedTest
@@ -69,7 +68,7 @@ public class WeatherForecastHandlerTests {
                 "24, 1" ,
                 "25, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectTempValue(double expected, int index) {
-        double temperatureInReport = weatherForecastReport.getForecast().get(index).getDetails().getTemperature();
+        double temperatureInReport = weatherForecast.get(index).getDetails().getTemperature();
 
         assertThat(temperatureInReport).isEqualTo(expected);
     }
@@ -79,7 +78,7 @@ public class WeatherForecastHandlerTests {
             "1003, 1" ,
             "1020, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectPressureValue(double expected, int index) {
-        double pressureInReport = weatherForecastReport.getForecast().get(index).getDetails().getPressure();
+        double pressureInReport = weatherForecast.get(index).getDetails().getPressure();
 
         assertThat(pressureInReport).isEqualTo(expected);
     }
@@ -89,7 +88,7 @@ public class WeatherForecastHandlerTests {
             "46, 1" ,
             "49, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectHumidityValue(double expected, int index) {
-        double humidityInReport = weatherForecastReport.getForecast().get(index).getDetails().getHumidity();
+        double humidityInReport = weatherForecast.get(index).getDetails().getHumidity();
 
         assertThat(humidityInReport).isEqualTo(expected);
     }
@@ -102,9 +101,8 @@ public class WeatherForecastHandlerTests {
             "10-12-2022, 2"
     })
     public void givenCityName_getWeatherForecastReport_ReportsAreSortedCorrectly(String expectedDate, int index) {
-        WeatherReport oneDayReport = weatherForecastReport.getForecast().get(index);
+        WeatherReport oneDayReport = weatherForecast.get(index);
         assertThat(oneDayReport.getDate()).isEqualTo(expectedDate);
     }
-
 
 }

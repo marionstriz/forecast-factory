@@ -1,6 +1,5 @@
 package app.integration;
 
-import app.domain.WeatherForecastReport;
 import app.domain.WeatherReport;
 import app.weather.WeatherForecastHandler;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,33 +15,30 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 public class WeatherForecastHandlerTests {
 
     private static WeatherForecastHandler weatherForecastHandler;
-    private static WeatherForecastReport weatherForecastReport;
-
-    private static List<WeatherReport> forecast;
+    private static List<WeatherReport> weatherForecast;
 
     @BeforeAll
     public static void Initialize(){
         String city = "Stockholm";
         weatherForecastHandler = new WeatherForecastHandler();
-        weatherForecastReport = weatherForecastHandler.getWeatherForecastReport(city);
-        forecast = weatherForecastReport.getForecast();
+        weatherForecast = weatherForecastHandler.getWeatherForecastReport(city);
     }
 
     @Test
     public void givenCityName_WeatherForecastReportCannotBeNull() {
-        assertThat(weatherForecastReport).isNotNull();
+        assertThat(weatherForecast).isNotNull();
     }
 
     @Test
     public void givenCityName_WeatherForecastHasThreeDayReport() {
-        assertThat(forecast.size()).isEqualTo(3);
+        assertThat(weatherForecast.size()).isEqualTo(3);
     }
 
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     public void givenCityName_getWeatherForecastReport_WeatherReportInForecastIsNotNull(int index) {
-        assertThat(forecast.get(index)).isNotNull();
+        assertThat(weatherForecast.get(index)).isNotNull();
     }
 
     @Test
