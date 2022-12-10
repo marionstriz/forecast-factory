@@ -13,6 +13,6 @@ public class CityWeatherReport {
     @NonNull
     private MainDetails mainDetails;
     @NonNull
-    private WeatherReport weatherReport;
+    private WeatherReport currentWeatherReport;
     List<WeatherReport> forecastReport;
 }

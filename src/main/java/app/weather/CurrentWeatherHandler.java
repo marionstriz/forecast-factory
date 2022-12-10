@@ -12,6 +12,7 @@ import app.dto.WeatherInfoDto;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class CurrentWeatherHandler {
 
@@ -52,9 +53,10 @@ public class CurrentWeatherHandler {
     }
 
     public String getDateFromMillisInStringFormat(long millis) {
-        Date date = new Date(millis*1000);
+        Date date = new Date (millis*1000);
         String pattern = "dd-MM-yyyy";
         DateFormat format = new SimpleDateFormat(pattern);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
         return format.format(date);
     }
 

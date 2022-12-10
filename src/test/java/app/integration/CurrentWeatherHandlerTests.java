@@ -24,7 +24,7 @@ public class CurrentWeatherHandlerTests {
         currentWeatherHandler = new CurrentWeatherHandler();
         cityWeatherReport = currentWeatherHandler.getCityWeatherReport(city);
         mainDetails = cityWeatherReport.getMainDetails();
-        weatherReport = cityWeatherReport.getWeatherReport();
+        weatherReport = cityWeatherReport.getCurrentWeatherReport();
     }
 
     @Test
@@ -84,20 +84,20 @@ public class CurrentWeatherHandlerTests {
 
     @Test
     public void currentWeatherDto_HasTemperatureWithinRealisticCelsiusLimits() {
-        double currentTemp = weatherReport.getDetails().getTemperature();
+        double currentTemp = weatherReport.getWeather().getTemperature();
         assertThat(currentTemp).isLessThan(60);
         assertThat(currentTemp).isGreaterThan(-90);
     }
 
     @Test
     public void currentWeatherDto_HasPressureNotDefaultValue() {
-        double currentPressure = weatherReport.getDetails().getPressure();
+        double currentPressure = weatherReport.getWeather().getPressure();
         assertThat(currentPressure).isNotZero();
     }
 
     @Test
     public void currentWeatherDto_HasHumidityNotDefaultValue() {
-        double currentHumidity = weatherReport.getDetails().getHumidity();
+        double currentHumidity = weatherReport.getWeather().getHumidity();
         assertThat(currentHumidity).isNotZero();
     }
 }

@@ -4,5 +4,5 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public interface WeatherReportMixin {
     @JsonUnwrapped
-    WeatherReportDetails getDetails();
+    WeatherReportDetails getWeather();
 }

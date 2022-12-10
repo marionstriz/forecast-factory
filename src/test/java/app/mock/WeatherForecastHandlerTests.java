@@ -72,7 +72,7 @@ public class WeatherForecastHandlerTests {
                 "12.5, 1" ,
                 "18, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectTempValue(double expected, int index) {
-        double temperatureInReport = weatherForecast.get(index).getDetails().getTemperature();
+        double temperatureInReport = weatherForecast.get(index).getWeather().getTemperature();
 
         assertThat(temperatureInReport).isEqualTo(expected);
     }
@@ -82,7 +82,7 @@ public class WeatherForecastHandlerTests {
             "1151, 1" ,
             "1253, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectPressureValue(double expected, int index) {
-        double pressureInReport = weatherForecast.get(index).getDetails().getPressure();
+        double pressureInReport = weatherForecast.get(index).getWeather().getPressure();
 
         assertThat(pressureInReport).isEqualTo(expected);
     }
@@ -92,7 +92,7 @@ public class WeatherForecastHandlerTests {
             "50, 1" ,
             "67, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectHumidityValue(double expected, int index) {
-        double humidityInReport = weatherForecast.get(index).getDetails().getHumidity();
+        double humidityInReport = weatherForecast.get(index).getWeather().getHumidity();
 
         assertThat(humidityInReport).isEqualTo(expected);
     }
