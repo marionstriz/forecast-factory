@@ -1,5 +1,6 @@
 package app.unit;
 
+import app.domain.WeatherReport;
 import app.domain.WeatherReportDetails;
 import app.dto.ForecastDto;
 import app.dto.RangeForecastDto;
@@ -11,42 +12,63 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 public class WeatherForecastHandlerTests {
     private static WeatherForecastHandler weatherForecastHandler;
     private static WeatherReportDetails weatherReportDetails;
-    private static Map<String, List<WeatherInfoDto>> forecastMap;
+    private static Map<String, List<WeatherInfoDto>> forecastMapStartingToday;
+    private static Map<String, List<WeatherInfoDto>> forecastMapStartingTomorrow;
 
     @BeforeAll
     public static void Initialize() {
         weatherForecastHandler = new WeatherForecastHandler();
 
-        ForecastDto forecastDto = new ForecastDto();
+        ForecastDto forecastDtoWtihToday = new ForecastDto();
+        ForecastDto forecastDtoFromTomorrow = new ForecastDto();
 
-        forecastDto.setRangeForecastDtos(List.of(
+        forecastDtoWtihToday.setRangeForecastDtos(List.of(
                 new RangeForecastDto("2022-11-01 15:00:00",
                         new WeatherInfoDto(25, 1000, 40)),
+                new RangeForecastDto("2022-11-02 00:00:00",
+                        new WeatherInfoDto(-5, 1100, 80)),
                 new RangeForecastDto("2022-11-02 03:00:00",
                         new WeatherInfoDto(17, 1000, 50)),
                 new RangeForecastDto("2022-11-02 06:00:00",
                         new WeatherInfoDto(20, 1003, 35)),
+                new RangeForecastDto("2022-11-03 00:00:00",
+                        new WeatherInfoDto(5, 1300, 60)),
                 new RangeForecastDto("2022-11-03 12:00:00",
                         new WeatherInfoDto(20, 1002, 40)),
+                new RangeForecastDto("2022-11-04 00:00:00",
+                        new WeatherInfoDto(11, 1506, 95)),
                 new RangeForecastDto("2022-11-04 15:00:00",
                         new WeatherInfoDto(25, 1000, 40)),
-                new RangeForecastDto("2022-11-05 15:00:00",
+                new RangeForecastDto("2022-11-05 00:00:00",
                         new WeatherInfoDto(25, 1000, 40))));
+
+        forecastDtoFromTomorrow.setRangeForecastDtos(List.of(
+                new RangeForecastDto("2018-09-15 00:00:00",
+                        new WeatherInfoDto(25, 1000, 40)),
+                new RangeForecastDto("2018-09-16 00:00:00",
+                        new WeatherInfoDto(5, 1100, 80)),
+                new RangeForecastDto("2018-09-17 00:00:00",
+                        new WeatherInfoDto(2, 1000, 30)),
+                new RangeForecastDto("2018-09-18 00:00:00",
+                        new WeatherInfoDto(10, 1000, 75))));
 
         List<WeatherInfoDto> weatherInfoDtos = List.of(
                 new WeatherInfoDto(2, 100, 10),
                 new WeatherInfoDto(9, 200, 5),
                 new WeatherInfoDto(4, 120, 15));
 
-        forecastMap = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDto);
+        forecastMapStartingToday = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDtoWtihToday);
+        forecastMapStartingTomorrow = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDtoFromTomorrow);
 
         weatherReportDetails = weatherForecastHandler.calculateOneDayReportDetails(weatherInfoDtos);
     }
@@ -84,29 +106,50 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_GetsResultOfThreeKeyAndValuePairs() {
-        assertThat(forecastMap).hasSize(5);
+        assertThat(forecastMapStartingToday).hasSize(5);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "01-11-2022",
             "02-11-2022",
             "03-11-2022",
-            "04-11-2022",
-            "05-11-2022"
+            "04-11-2022"
     })
     public void WhenGivenForecastDto_FilterToMapByDate_ContainsKey(String existingKey) {
-        assertThat(forecastMap).containsKey(existingKey);
+        assertThat(forecastMapStartingToday).containsKey(existingKey);
     }
 
     @ParameterizedTest
     @CsvSource({
-            "02-11-2022, 2",
-            "03-11-2022, 1",
-            "04-11-2022, 1"
+            "02-11-2022, 3",
+            "03-11-2022, 2",
+            "04-11-2022, 2"
     })
     public void WhenGivenForecastDto_FilterToMapByDate_HasCorrectNumberOfRangeForecasts(String key, int listSize) {
-        assertThat(forecastMap.get(key)).hasSize(listSize);
+        assertThat(forecastMapStartingToday.get(key)).hasSize(listSize);
     }
 
+    @Test
+    public void WhenGivenForecastDto_WithFirstForecastAtMidnight_FilterToMapIncludesIt() {
+        assertThat(forecastMapStartingTomorrow.get("15-09-2018")).isNotNull();
+    }
+
+    @Test
+    public void WhenGivenMap_WithFirstForecastAtMidnight_FinalReportIncludesIt() {
+        List<WeatherReport> forecast = weatherForecastHandler.extractThreeDayReportFromMap(forecastMapStartingTomorrow);
+
+        String firstForecastDate = forecast.get(0).getDate();
+        String expectedDate = "15-09-2018";
+
+        assertThat(firstForecastDate).isEqualTo(expectedDate);
+    }
+
+    @Test
+    public void WhenExtractingThreeDayForecast_ThrowsErrorIfThreeDaysNotPossible() {
+        LinkedHashMap<String, List<WeatherInfoDto>> map = new LinkedHashMap<>();
+        map.put("24-12-2022", List.of(new WeatherInfoDto(-10, 1500, 85)));
+
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> weatherForecastHandler.extractThreeDayReportFromMap(map));
+    }
 }

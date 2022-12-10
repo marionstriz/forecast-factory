@@ -32,20 +32,24 @@ public class WeatherForecastHandlerTests {
         ForecastDto forecastDtoStub = new ForecastDto();
 
         forecastDtoStub.setRangeForecastDtos(List.of(
-                new RangeForecastDto("2022-12-07 03:00:00",
-                        new WeatherInfoDto(16, 1000, 50)),
-                new RangeForecastDto("2022-12-07 06:00:00",
-                        new WeatherInfoDto(20, 1004, 36)),
-                new RangeForecastDto("2022-12-08 12:00:00",
+                new RangeForecastDto("2022-11-01 15:00:00",
+                        new WeatherInfoDto(25, 1000, 40)),
+                new RangeForecastDto("2022-11-02 00:00:00",
+                        new WeatherInfoDto(-5, 1100, 80)),
+                new RangeForecastDto("2022-11-02 03:00:00",
+                        new WeatherInfoDto(17, 1000, 50)),
+                new RangeForecastDto("2022-11-02 06:00:00",
+                        new WeatherInfoDto(20, 1003, 35)),
+                new RangeForecastDto("2022-11-03 00:00:00",
+                        new WeatherInfoDto(5, 1300, 60)),
+                new RangeForecastDto("2022-11-03 12:00:00",
                         new WeatherInfoDto(20, 1002, 40)),
-                new RangeForecastDto("2022-12-08 15:00:00",
-                        new WeatherInfoDto(26, 1000, 40)),
-                new RangeForecastDto("2022-12-09 15:00:00",
-                        new WeatherInfoDto(24, 1003, 46)),
-                new RangeForecastDto("2022-12-10 15:00:00",
-                        new WeatherInfoDto(25, 1020, 49)),
-                new RangeForecastDto("2022-12-11 15:00:00",
-                        new WeatherInfoDto(29, 1090, 50))));
+                new RangeForecastDto("2022-11-04 00:00:00",
+                        new WeatherInfoDto(11, 1506, 95)),
+                new RangeForecastDto("2022-11-04 15:00:00",
+                        new WeatherInfoDto(25, 1000, 40)),
+                new RangeForecastDto("2022-11-05 00:00:00",
+                        new WeatherInfoDto(25, 1000, 40))));
 
         Mockito.when(weatherApi.getForecastDtoAboutCity(city)).thenReturn(forecastDtoStub);
 
@@ -64,9 +68,9 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"23, 0",
-                "24, 1" ,
-                "25, 2"})
+    @CsvSource({"10.67, 0",
+                "12.5, 1" ,
+                "18, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectTempValue(double expected, int index) {
         double temperatureInReport = weatherForecast.get(index).getDetails().getTemperature();
 
@@ -74,9 +78,9 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"1001, 0",
-            "1003, 1" ,
-            "1020, 2"})
+    @CsvSource({"1034, 0",
+            "1151, 1" ,
+            "1253, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectPressureValue(double expected, int index) {
         double pressureInReport = weatherForecast.get(index).getDetails().getPressure();
 
@@ -84,9 +88,9 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"40, 0",
-            "46, 1" ,
-            "49, 2"})
+    @CsvSource({"55, 0",
+            "50, 1" ,
+            "67, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectHumidityValue(double expected, int index) {
         double humidityInReport = weatherForecast.get(index).getDetails().getHumidity();
 
@@ -96,9 +100,9 @@ public class WeatherForecastHandlerTests {
 
     @ParameterizedTest
     @CsvSource({
-            "08-12-2022, 0",
-            "09-12-2022, 1",
-            "10-12-2022, 2"
+            "02-11-2022, 0",
+            "03-11-2022, 1",
+            "04-11-2022, 2"
     })
     public void givenCityName_getWeatherForecastReport_ReportsAreSortedCorrectly(String expectedDate, int index) {
         WeatherReport oneDayReport = weatherForecast.get(index);

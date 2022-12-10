@@ -29,7 +29,7 @@ public class WeatherForecastHandler {
         return extractThreeDayReportFromMap(weatherInfoDtoMap);
     }
 
-    private List<WeatherReport> extractThreeDayReportFromMap(Map<String, List<WeatherInfoDto>> weatherInfoDtoMap) {
+    public List<WeatherReport> extractThreeDayReportFromMap(Map<String, List<WeatherInfoDto>> weatherInfoDtoMap) {
         List<WeatherReport> forecast = new ArrayList<>();
         int counter = 0;
         for (Map.Entry<String, List<WeatherInfoDto>> map : weatherInfoDtoMap.entrySet()) {
