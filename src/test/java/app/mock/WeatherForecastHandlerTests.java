@@ -53,7 +53,7 @@ public class WeatherForecastHandlerTests {
 
         Mockito.when(weatherApi.getForecastDtoAboutCity(city)).thenReturn(forecastDtoStub);
 
-        weatherForecast = new WeatherForecastHandler(weatherApi).getWeatherForecastReport(city);
+        weatherForecast = new WeatherForecastHandler(weatherApi).getThreeDayForecastAboutCity(city);
     }
 
     @Test

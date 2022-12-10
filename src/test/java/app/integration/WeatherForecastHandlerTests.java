@@ -21,7 +21,7 @@ public class WeatherForecastHandlerTests {
     public static void Initialize(){
         String city = "Stockholm";
         weatherForecastHandler = new WeatherForecastHandler();
-        weatherForecast = weatherForecastHandler.getWeatherForecastReport(city);
+        weatherForecast = weatherForecastHandler.getThreeDayForecastAboutCity(city);
     }
 
     @Test
@@ -44,20 +44,20 @@ public class WeatherForecastHandlerTests {
     @Test
     public void givenNonExistentCity_GetWeatherForecastReport_ThrowsIllegalArgumentException() {
         assertThatIllegalArgumentException().isThrownBy(
-                () -> weatherForecastHandler.getWeatherForecastReport("Deathstar"));
+                () -> weatherForecastHandler.getThreeDayForecastAboutCity("Deathstar"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"       ", "", " \t \n \t\t "})
     public void givenEmptyString_GetWeatherForecastReport_ThrowsIllegalArgumentException(String input) {
         assertThatIllegalArgumentException().isThrownBy(
-                () -> weatherForecastHandler.getWeatherForecastReport(input));
+                () -> weatherForecastHandler.getThreeDayForecastAboutCity(input));
     }
 
     @Test
     public void givenNull_GetWeatherForecastReport_ThrowsIllegalArgumentException() {
         assertThatIllegalArgumentException().isThrownBy(
-                () -> weatherForecastHandler.getWeatherForecastReport(null));
+                () -> weatherForecastHandler.getThreeDayForecastAboutCity(null));
     }
 
 }

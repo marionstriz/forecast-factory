@@ -12,7 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +22,8 @@ public class WeatherForecastHandlerTests {
     private static WeatherForecastHandler weatherForecastHandler;
     private static WeatherReportDetails weatherReportDetails;
     private static Map<String, List<WeatherInfoDto>> forecastMapStartingToday;
+
+    private static ForecastDto forecastDtoFromTomorrow;
     private static Map<String, List<WeatherInfoDto>> forecastMapStartingTomorrow;
 
     @BeforeAll
@@ -30,7 +31,7 @@ public class WeatherForecastHandlerTests {
         weatherForecastHandler = new WeatherForecastHandler();
 
         ForecastDto forecastDtoWtihToday = new ForecastDto();
-        ForecastDto forecastDtoFromTomorrow = new ForecastDto();
+        forecastDtoFromTomorrow = new ForecastDto();
 
         forecastDtoWtihToday.setRangeForecastDtos(List.of(
                 new RangeForecastDto("2022-11-01 15:00:00",
@@ -67,8 +68,8 @@ public class WeatherForecastHandlerTests {
                 new WeatherInfoDto(9, 200, 5),
                 new WeatherInfoDto(4, 120, 15));
 
-        forecastMapStartingToday = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDtoWtihToday);
-        forecastMapStartingTomorrow = weatherForecastHandler.filterWeatherInfoDtosToMapByDate(forecastDtoFromTomorrow);
+        forecastMapStartingToday = weatherForecastHandler.filterThreeFullDaysWeatherInfosToMapByDate(forecastDtoWtihToday);
+        forecastMapStartingTomorrow = weatherForecastHandler.filterThreeFullDaysWeatherInfosToMapByDate(forecastDtoFromTomorrow);
 
         weatherReportDetails = weatherForecastHandler.calculateOneDayReportDetails(weatherInfoDtos);
     }
@@ -106,7 +107,7 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenGivenForecastDto_FilterToMapByDate_GetsResultOfThreeKeyAndValuePairs() {
-        assertThat(forecastMapStartingToday).hasSize(5);
+        assertThat(forecastMapStartingToday).hasSize(3);
     }
 
     @ParameterizedTest
@@ -136,7 +137,7 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenGivenMap_WithFirstForecastAtMidnight_FinalReportIncludesIt() {
-        List<WeatherReport> forecast = weatherForecastHandler.extractThreeDayReportFromMap(forecastMapStartingTomorrow);
+        List<WeatherReport> forecast = weatherForecastHandler.extractThreeDayReportFromForecastDto(forecastDtoFromTomorrow);
 
         String firstForecastDate = forecast.get(0).getDate();
         String expectedDate = "15-09-2018";
@@ -146,10 +147,10 @@ public class WeatherForecastHandlerTests {
 
     @Test
     public void WhenExtractingThreeDayForecast_ThrowsErrorIfThreeDaysNotPossible() {
-        LinkedHashMap<String, List<WeatherInfoDto>> map = new LinkedHashMap<>();
-        map.put("24-12-2022", List.of(new WeatherInfoDto(-10, 1500, 85)));
+        ForecastDto dto = new ForecastDto();
+        dto.setRangeForecastDtos(List.of(new RangeForecastDto("24-12-2022 03:00:00", new WeatherInfoDto(-10, 1500, 85))));
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> weatherForecastHandler.extractThreeDayReportFromMap(map));
+                () -> weatherForecastHandler.extractThreeDayReportFromForecastDto(dto));
     }
 }

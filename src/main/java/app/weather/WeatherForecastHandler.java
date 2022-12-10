@@ -7,6 +7,7 @@ import app.dto.ForecastDto;
 import app.dto.RangeForecastDto;
 import app.dto.WeatherInfoDto;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class WeatherForecastHandler {
@@ -22,62 +23,82 @@ public class WeatherForecastHandler {
     }
 
 
-    public List<WeatherReport> getWeatherForecastReport(String city) {
+    public List<WeatherReport> getThreeDayForecastAboutCity(String city) {
         ForecastDto forecastDto = weatherApi.getForecastDtoAboutCity(city);
-        Map<String, List<WeatherInfoDto>> weatherInfoDtoMap = filterWeatherInfoDtosToMapByDate(forecastDto);
-
-        return extractThreeDayReportFromMap(weatherInfoDtoMap);
+        return extractThreeDayReportFromForecastDto(forecastDto);
     }
 
-    public List<WeatherReport> extractThreeDayReportFromMap(Map<String, List<WeatherInfoDto>> weatherInfoDtoMap) {
-        List<WeatherReport> forecast = new ArrayList<>();
-        int counter = 0;
+    public List<WeatherReport> extractThreeDayReportFromForecastDto(ForecastDto forecastDto) {
+        Map<String, List<WeatherInfoDto>> weatherInfoDtoMap = filterThreeFullDaysWeatherInfosToMapByDate(forecastDto);
+        List<WeatherReport> weatherForecast = new ArrayList<>();
+
         for (Map.Entry<String, List<WeatherInfoDto>> map : weatherInfoDtoMap.entrySet()) {
-            if(counter > 0 && counter <= 3){
-                WeatherReportDetails details = calculateOneDayReportDetails(map.getValue());
-                WeatherReport report = new WeatherReport(map.getKey(), details);
-                forecast.add(report);
-                counter++;
-                continue;
-            }
-            counter++;
+            WeatherReportDetails details = calculateOneDayReportDetails(map.getValue());
+            WeatherReport report = new WeatherReport(map.getKey(), details);
+            weatherForecast.add(report);
         }
-        return forecast;
+        if (weatherForecast.size() != 3) {
+            throw new IllegalArgumentException("Unable to extract three-day-forecast from input");
+        }
+        return weatherForecast;
     }
 
 
-    public WeatherReportDetails calculateOneDayReportDetails(List<WeatherInfoDto> weatherInfoDtos){
-        double averageTemp = weatherInfoDtos
-                            .stream().mapToDouble(WeatherInfoDto::getTemp)
-                            .average().getAsDouble();
+    public WeatherReportDetails calculateOneDayReportDetails(List<WeatherInfoDto> weatherInfoDtos) {
+        WeatherInfoDto accumulatedDto = getAccumulatedWeatherInfo(weatherInfoDtos);
 
-        int averagePressure = (int) weatherInfoDtos
-                             .stream().mapToInt(WeatherInfoDto::getPressure)
-                             .average().getAsDouble();
+        int dtoCount = weatherInfoDtos.size();
 
-        int averageHumidity = (int) weatherInfoDtos
-                             .stream().mapToInt(WeatherInfoDto::getHumidity)
-                             .average()
-                             .getAsDouble();
+        double averageTemp = roundToTwoDecimalPlaces(accumulatedDto.getTemp() / dtoCount);
+        int averagePressure = accumulatedDto.getPressure() / dtoCount;
+        int averageHumidity = accumulatedDto.getHumidity() / dtoCount;
 
         return new WeatherReportDetails(averageTemp, averagePressure, averageHumidity);
     }
 
-    public LinkedHashMap<String, List<WeatherInfoDto>> filterWeatherInfoDtosToMapByDate(ForecastDto dto){
-        LinkedHashMap<String, List<WeatherInfoDto>> map = new LinkedHashMap<>();
+    private double roundToTwoDecimalPlaces(double d) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return Double.parseDouble(df.format(d));
+    }
+
+    private WeatherInfoDto getAccumulatedWeatherInfo(List<WeatherInfoDto> weatherInfoDtos) {
+        return weatherInfoDtos.stream().reduce((a, b) -> {
+            a.setTemp(a.getTemp() + b.getTemp());
+            a.setHumidity(a.getHumidity() + b.getHumidity());
+            a.setPressure(a.getPressure() + b.getPressure());
+            return a;
+        }).orElseThrow();
+    }
+
+    public Map<String, List<WeatherInfoDto>> filterThreeFullDaysWeatherInfosToMapByDate(ForecastDto dto){
+        Map<String, List<WeatherInfoDto>> map = new LinkedHashMap<>();
+
+        boolean newDay = false;
         for (RangeForecastDto rangeForecastDto : dto.getRangeForecastDtos()) {
             WeatherInfoDto weatherInfoDto = rangeForecastDto.getWeatherInfoDto();
-            map.computeIfAbsent(getDateInCorrectStringFormat(rangeForecastDto.getDate())
-                    , k -> new ArrayList<>()).add(weatherInfoDto);
+            String date = getDateInCorrectStringFormat(rangeForecastDto.getDate());
+
+            if (IsFirstForecastOfDay(rangeForecastDto)) {
+                if (map.size() == 3) {
+                    break;
+                }
+                newDay = true;
+            }
+            if (newDay) {
+                map.computeIfAbsent(date, k -> new ArrayList<>()).add(weatherInfoDto);
+            }
         }
-        System.out.println(map.keySet());
         return map;
     }
 
     public String getDateInCorrectStringFormat(String date){
-        String[] initialDateParts = date.split(" ");
-        String[] dateParts = initialDateParts[0].split("-");
+        String[] dateAndTime = date.split(" ");
+        String[] dateParts = dateAndTime[0].split("-");
 
         return String.format("%s-%s-%s", dateParts[2], dateParts[1],dateParts[0]);
+    }
+    private boolean IsFirstForecastOfDay(RangeForecastDto dto) {
+        String forecastTime = dto.getDate().split(" ")[1];
+        return forecastTime.equals("00:00:00");
     }
 }
