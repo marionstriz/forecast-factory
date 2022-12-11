@@ -7,10 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -29,9 +25,9 @@ public class CurrentWeatherHandlerTests {
 
     @Test
     public void WhenGivenDate_GetDateInStringFormat_ShouldReturnInCorrectFormat() {
-        String expectedStringDate = "30-12-2022";
-        Date date = new GregorianCalendar(2022, Calendar.DECEMBER, 30).getTime();
-        assertThat(currentWeatherHandler.getDateFromMillisInStringFormat(date.getTime()/1000))
+        long millis = 1670749067957L;
+        String expectedStringDate = "11-12-2022";
+        assertThat(currentWeatherHandler.getDateFromMillisInStringFormat(millis/1000))
                 .isEqualTo(expectedStringDate);
     }
 
