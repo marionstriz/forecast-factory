@@ -3,12 +3,16 @@ package app;
 import app.domain.CityWeatherReport;
 import app.weather.WeatherReportMachine;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.log4j.Logger;
 
 public class Main {
 
+    private static final Logger logger = Logger.getLogger(Main.class.getSimpleName());
+
     public static void main(String[] args) throws JsonProcessingException {
+        org.apache.log4j.BasicConfigurator.configure();
         if (args.length == 0) {
-            System.out.println("Must enter city name");
+            logger.error("Must enter city name");
             return;
         }
         String city = args[0];
@@ -18,7 +22,7 @@ public class Main {
             CityWeatherReport weatherReport = machine.getFullCityWeatherReport(city);
             System.out.println(machine.getWeatherReportAsJson(weatherReport));
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }
