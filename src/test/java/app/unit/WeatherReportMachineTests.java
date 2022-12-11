@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -15,15 +17,10 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 public class WeatherReportMachineTests {
 
     private static WeatherReportMachine weatherReportMachine;
-    private static CityWeatherReport cityWeatherReport;
 
     @BeforeAll
     public static void Initialize() {
         weatherReportMachine = new WeatherReportMachine();
-        MainDetails mainDetails = new MainDetails("Oslo", "33.31,45.21", "Celsius");
-        WeatherReport weatherReport = new WeatherReport("01-12-2022",
-                new WeatherReportDetails(10, 30, 50));
-        cityWeatherReport = new CityWeatherReport(mainDetails, weatherReport);
     }
 
     @Test
@@ -47,6 +44,17 @@ public class WeatherReportMachineTests {
 
     @Test
     public void weatherReportJson_HasSameMainDetailsAsOriginalReport() throws JsonProcessingException {
+        MainDetails mainDetails = new MainDetails("Oslo", "33.31,45.21", "Celsius");
+        CurrentWeather currentWeather = new CurrentWeather("01-12-2022",
+                new WeatherReportDetails(10, 50, 1000));
+        List<WeatherReport> forecast = List.of(
+                new WeatherReport("02-12-2022", new WeatherReportDetails(-2.5, 66, 1100)),
+                new WeatherReport("03-12-2022", new WeatherReportDetails(0, 50, 1100)),
+                new WeatherReport("04-12-2022", new WeatherReportDetails(-8.64, 26, 1300)));
+
+        CityWeatherReport cityWeatherReport =
+                new CityWeatherReport(mainDetails, currentWeather, forecast);
+
         String actualJson = weatherReportMachine.getWeatherReportAsJson(cityWeatherReport);
 
         String expectedJsonReport = """
@@ -56,12 +64,34 @@ public class WeatherReportMachineTests {
                     "coordinates" : "33.31,45.21",
                     "temperatureUnit" : "Celsius"
                   },
-                  "weatherReport" : {
+                  "currentWeatherReport" : {
                     "date" : "01-12-2022",
                     "temperature" : 10.0,
-                    "pressure" : 30,
-                    "humidity" : 50
-                  }
+                    "humidity" : 50,
+                    "pressure" : 1000
+                  },
+                  "forecastReport" : [ {
+                    "date" : "02-12-2022",
+                    "weather" : {
+                      "temperature" : -2.5,
+                      "humidity" : 66,
+                      "pressure" : 1100
+                    }
+                  }, {
+                    "date" : "03-12-2022",
+                    "weather" : {
+                      "temperature" : 0.0,
+                      "humidity" : 50,
+                      "pressure" : 1100
+                    }
+                  }, {
+                    "date" : "04-12-2022",
+                    "weather" : {
+                      "temperature" : -8.64,
+                      "humidity" : 26,
+                      "pressure" : 1300
+                    }
+                  } ]
                 }""";
         assertThat(actualJson).isEqualTo(expectedJsonReport);
     }
