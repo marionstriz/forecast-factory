@@ -33,23 +33,23 @@ public class WeatherForecastHandlerTests {
 
         forecastDtoStub.setRangeForecastDtos(List.of(
                 new RangeForecastDto("2022-11-01 15:00:00",
-                        new WeatherInfoDto(25, 1000, 40)),
+                        new WeatherInfoDto(25, 40, 1000)),
                 new RangeForecastDto("2022-11-02 00:00:00",
-                        new WeatherInfoDto(-5, 1100, 80)),
+                        new WeatherInfoDto(-5, 80, 1100)),
                 new RangeForecastDto("2022-11-02 03:00:00",
-                        new WeatherInfoDto(17, 1000, 50)),
+                        new WeatherInfoDto(17, 50, 1100)),
                 new RangeForecastDto("2022-11-02 06:00:00",
-                        new WeatherInfoDto(20, 1003, 35)),
+                        new WeatherInfoDto(20, 35, 1003)),
                 new RangeForecastDto("2022-11-03 00:00:00",
-                        new WeatherInfoDto(5, 1300, 60)),
+                        new WeatherInfoDto(5, 60, 1300)),
                 new RangeForecastDto("2022-11-03 12:00:00",
-                        new WeatherInfoDto(20, 1002, 40)),
+                        new WeatherInfoDto(20, 40, 1002)),
                 new RangeForecastDto("2022-11-04 00:00:00",
-                        new WeatherInfoDto(11, 1506, 95)),
+                        new WeatherInfoDto(11, 95, 1506)),
                 new RangeForecastDto("2022-11-04 15:00:00",
-                        new WeatherInfoDto(25, 1000, 40)),
+                        new WeatherInfoDto(25, 40, 1000)),
                 new RangeForecastDto("2022-11-05 00:00:00",
-                        new WeatherInfoDto(25, 1000, 40))));
+                        new WeatherInfoDto(25, 40, 1000))));
 
         Mockito.when(weatherApi.getForecastDtoAboutCity(city)).thenReturn(forecastDtoStub);
 
@@ -78,7 +78,7 @@ public class WeatherForecastHandlerTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"1034, 0",
+    @CsvSource({"1067, 0",
             "1151, 1" ,
             "1253, 2"})
     public void givenCityName_getWeatherForecastReport_WeatherReportHasCorrectPressureValue(double expected, int index) {

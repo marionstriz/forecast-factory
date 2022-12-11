@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WeatherReportDetails {
     private double temperature;
-    private int pressure;
     private int humidity;
+    private int pressure;
 }

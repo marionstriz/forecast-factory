@@ -1,10 +1,7 @@
 package app.weather;
 
 import app.api.WeatherApi;
-import app.domain.CityWeatherReport;
-import app.domain.WeatherReport;
-import app.domain.MainDetails;
-import app.domain.WeatherReportDetails;
+import app.domain.*;
 import app.dto.CoordinatesDto;
 import app.dto.CurrentWeatherDto;
 import app.dto.WeatherInfoDto;
@@ -29,15 +26,15 @@ public class CurrentWeatherHandler {
     public CityWeatherReport getCityWeatherReport(String city) {
         CurrentWeatherDto dto = weatherApi.getCurrentWeatherDtoAboutCity(city);
         MainDetails mainDetails = getMainDetailsFromDto(dto);
-        WeatherReport weatherReport = getCurrentWeatherFromDto(dto);
+        CurrentWeather weatherReport = getCurrentWeatherFromDto(dto);
         return new CityWeatherReport(mainDetails, weatherReport);
     }
 
-    private WeatherReport getCurrentWeatherFromDto(CurrentWeatherDto dto){
+    private CurrentWeather getCurrentWeatherFromDto(CurrentWeatherDto dto){
         String dateString = getDateFromMillisInStringFormat(dto.getUtcMillis());
         WeatherInfoDto weatherInfoDto = dto.getWeatherInfoDto();
 
-        return new WeatherReport(
+        return new CurrentWeather(
                 dateString,
                 new WeatherReportDetails(
                         weatherInfoDto.getTemp(),

@@ -35,38 +35,38 @@ public class WeatherForecastHandlerTests {
 
         forecastDtoWtihToday.setRangeForecastDtos(List.of(
                 new RangeForecastDto("2022-11-01 15:00:00",
-                        new WeatherInfoDto(25, 1000, 40)),
+                        new WeatherInfoDto(25, 40, 1000)),
                 new RangeForecastDto("2022-11-02 00:00:00",
-                        new WeatherInfoDto(-5, 1100, 80)),
+                        new WeatherInfoDto(-5, 80, 1100)),
                 new RangeForecastDto("2022-11-02 03:00:00",
-                        new WeatherInfoDto(17, 1000, 50)),
+                        new WeatherInfoDto(17, 50, 1100)),
                 new RangeForecastDto("2022-11-02 06:00:00",
-                        new WeatherInfoDto(20, 1003, 35)),
+                        new WeatherInfoDto(20, 35, 1003)),
                 new RangeForecastDto("2022-11-03 00:00:00",
-                        new WeatherInfoDto(5, 1300, 60)),
+                        new WeatherInfoDto(5, 60, 1300)),
                 new RangeForecastDto("2022-11-03 12:00:00",
-                        new WeatherInfoDto(20, 1002, 40)),
+                        new WeatherInfoDto(20, 40, 1002)),
                 new RangeForecastDto("2022-11-04 00:00:00",
-                        new WeatherInfoDto(11, 1506, 95)),
+                        new WeatherInfoDto(11, 95, 1506)),
                 new RangeForecastDto("2022-11-04 15:00:00",
-                        new WeatherInfoDto(25, 1000, 40)),
+                        new WeatherInfoDto(25, 40, 1000)),
                 new RangeForecastDto("2022-11-05 00:00:00",
-                        new WeatherInfoDto(25, 1000, 40))));
+                        new WeatherInfoDto(25, 40, 1000))));
 
         forecastDtoFromTomorrow.setRangeForecastDtos(List.of(
                 new RangeForecastDto("2018-09-15 00:00:00",
-                        new WeatherInfoDto(25, 1000, 40)),
+                        new WeatherInfoDto(25, 40, 1000)),
                 new RangeForecastDto("2018-09-16 00:00:00",
-                        new WeatherInfoDto(5, 1100, 80)),
+                        new WeatherInfoDto(5, 80, 1100)),
                 new RangeForecastDto("2018-09-17 00:00:00",
-                        new WeatherInfoDto(2, 1000, 30)),
+                        new WeatherInfoDto(2, 30, 1000)),
                 new RangeForecastDto("2018-09-18 00:00:00",
-                        new WeatherInfoDto(10, 1000, 75))));
+                        new WeatherInfoDto(10, 75, 1000))));
 
         List<WeatherInfoDto> weatherInfoDtos = List.of(
-                new WeatherInfoDto(2, 100, 10),
-                new WeatherInfoDto(9, 200, 5),
-                new WeatherInfoDto(4, 120, 15));
+                new WeatherInfoDto(2, 10, 100),
+                new WeatherInfoDto(9, 5, 200),
+                new WeatherInfoDto(4, 15, 120));
 
         forecastMapStartingToday = weatherForecastHandler.filterThreeFullDaysWeatherInfosToMapByDate(forecastDtoWtihToday);
         forecastMapStartingTomorrow = weatherForecastHandler.filterThreeFullDaysWeatherInfosToMapByDate(forecastDtoFromTomorrow);

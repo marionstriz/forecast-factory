@@ -1,6 +1,6 @@
 package app.integration;
 import app.domain.CityWeatherReport;
-import app.domain.WeatherReport;
+import app.domain.CurrentWeather;
 import app.domain.MainDetails;
 import app.weather.CurrentWeatherHandler;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 public class CurrentWeatherHandlerTests {
 
     private static MainDetails mainDetails;
-    private static WeatherReport weatherReport;
+    private static CurrentWeather currentWeather;
     private static CityWeatherReport cityWeatherReport;
     private static CurrentWeatherHandler currentWeatherHandler;
 
@@ -24,7 +24,7 @@ public class CurrentWeatherHandlerTests {
         currentWeatherHandler = new CurrentWeatherHandler();
         cityWeatherReport = currentWeatherHandler.getCityWeatherReport(city);
         mainDetails = cityWeatherReport.getMainDetails();
-        weatherReport = cityWeatherReport.getCurrentWeatherReport();
+        currentWeather = cityWeatherReport.getCurrentWeatherReport();
     }
 
     @Test
@@ -39,7 +39,7 @@ public class CurrentWeatherHandlerTests {
 
     @Test
     public void givenCityName_CurrentWeatherReport_CannotBeNull() {
-        assertThat(weatherReport).isNotNull();
+        assertThat(currentWeather).isNotNull();
     }
 
     @Test
@@ -84,20 +84,20 @@ public class CurrentWeatherHandlerTests {
 
     @Test
     public void currentWeatherDto_HasTemperatureWithinRealisticCelsiusLimits() {
-        double currentTemp = weatherReport.getWeather().getTemperature();
+        double currentTemp = currentWeather.getWeather().getTemperature();
         assertThat(currentTemp).isLessThan(60);
         assertThat(currentTemp).isGreaterThan(-90);
     }
 
     @Test
     public void currentWeatherDto_HasPressureNotDefaultValue() {
-        double currentPressure = weatherReport.getWeather().getPressure();
+        double currentPressure = currentWeather.getWeather().getPressure();
         assertThat(currentPressure).isNotZero();
     }
 
     @Test
     public void currentWeatherDto_HasHumidityNotDefaultValue() {
-        double currentHumidity = weatherReport.getWeather().getHumidity();
+        double currentHumidity = currentWeather.getWeather().getHumidity();
         assertThat(currentHumidity).isNotZero();
     }
 }
