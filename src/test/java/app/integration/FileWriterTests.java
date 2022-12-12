@@ -34,7 +34,7 @@ public class FileWriterTests {
         fileWriter.writeReportFile(report);
 
         String expectedJson = machine.getWeatherReportAsJson(report);
-        Path expectedPath = fileWriter.getDestinationDir().resolve(city + ".txt");
+        Path expectedPath = fileWriter.getDestinationDir().resolve(city + ".json");
 
         assertThat(Files.exists(expectedPath)).isTrue();
         assertThat(Files.readString(expectedPath)).isEqualTo(expectedJson);

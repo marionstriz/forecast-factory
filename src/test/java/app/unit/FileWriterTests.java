@@ -35,7 +35,7 @@ public class FileWriterTests {
 
         fileWriter.writeReportFile(report);
 
-        Path expectedPath = fileWriter.getDestinationDir().resolve("Oslo.txt");
+        Path expectedPath = fileWriter.getDestinationDir().resolve("Oslo.json");
         String expectedJson = """
                 {
                   "mainDetails" : {

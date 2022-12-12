@@ -40,7 +40,7 @@ public class WeatherApi {
 
     private static void checkIfResponseIs404(String city, ClientResponse response) {
         if (response.getStatus() == 404){
-            throw new IllegalArgumentException("Not a real city >:( : " + city);
+            throw new IllegalArgumentException(city + " is not a real city");
         }
     }
 

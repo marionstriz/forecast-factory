@@ -18,8 +18,12 @@ public class WeatherReportMachine {
         return cityWeatherReport;
     }
 
-    public String getWeatherReportAsJson(CityWeatherReport report) throws JsonProcessingException {
+    public String getWeatherReportAsJson(CityWeatherReport report) {
         ObjectMapper om = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        return om.writeValueAsString(report);
+        try {
+            return om.writeValueAsString(report);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Unable to convert report to json");
+        }
     }
 }

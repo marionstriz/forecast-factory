@@ -1,25 +1,29 @@
 package app;
 
 import app.domain.CityWeatherReport;
+import app.helpers.UserInputUtils;
+import app.io.FileWriter;
 import app.weather.WeatherReportMachine;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.log4j.Logger;
 
 public class Main {
 
     private static final Logger logger = Logger.getLogger(Main.class.getSimpleName());
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) {
         if (args.length == 0) {
-            logger.error("Must enter city name");
+            logger.error("Please enter city or file name");
             return;
         }
-        String input = args[0];
-
+        String input = String.join(" ", args);
         WeatherReportMachine machine = new WeatherReportMachine();
+        FileWriter writer = new FileWriter();
+
         try {
-            CityWeatherReport weatherReport = machine.getFullCityWeatherReport(input);
-            System.out.println(machine.getWeatherReportAsJson(weatherReport));
+            String city = UserInputUtils.getFileContentsOrInput(input);
+            CityWeatherReport weatherReport = machine.getFullCityWeatherReport(city);
+
+            writer.writeReportFile(weatherReport);
         } catch (IllegalArgumentException e) {
             logger.error(e.getMessage());
         }
