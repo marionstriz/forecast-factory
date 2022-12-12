@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.file.Path;
+
 import static app.helpers.UserInputUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -13,6 +15,8 @@ public class UserInputUtilsTests {
     private final String validExtensionFile = "city.txt";
     private final String invalidExtensionFile = "not-valid.csv";
     private final String notAFile = "not-a-file";
+    private static final Path pathToDataDir = Path.of("src", "test", "java", "app", "data");
+
 
     @Test
     public void givenFileWithCorrectExtension_HasCorrectFileExtension_ReturnsTrue(){
@@ -71,8 +75,8 @@ public class UserInputUtilsTests {
 
     @Test
     public void givenValidFile_getFileContentsOrInput_ReturnsContents(){
-        String cityWithSymbolsFile = "weird-city.txt";
-        String expected = "Saint Petersburg";
+        String cityWithSymbolsFile = pathToDataDir.resolve("weird-city.txt").toString();
+        String expected = "St. Petersburg";
         assertThat(getFileContentsOrInput(cityWithSymbolsFile)).isEqualTo(expected);
     }
 
