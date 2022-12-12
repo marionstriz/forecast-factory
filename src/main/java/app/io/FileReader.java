@@ -21,8 +21,7 @@ public class FileReader {
             content = Files.readString(path);
         } catch (IOException e) {
             throw new RuntimeException(
-                    "Error reading file at " + pathString
-            );
+                    "Error reading file at " + pathString);
         }
         return content;
     }
