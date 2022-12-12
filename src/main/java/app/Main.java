@@ -30,8 +30,13 @@ public class Main {
         WeatherReportMachine machine = new WeatherReportMachine();
         FileWriter writer = path == null ? new FileWriter() : new FileWriter(path);
 
-        List<String> cities = UserInputUtils.getCitiesFromInput(input);
-
+        List<String> cities;
+        try {
+            cities = UserInputUtils.getCitiesFromInput(input);
+        } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
+            return;
+        }
         for (String city : cities) {
             try {
                 CityWeatherReport weatherReport = machine.getFullCityWeatherReport(city);
