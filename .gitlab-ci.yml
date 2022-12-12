@@ -31,9 +31,39 @@ build:
       - build
       - .gradle
 
-test:
+integration:
   stage: test
-  script: gradle test
+  script: gradle test --tests "app.integration*"
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle
+
+mock:
+  stage: test
+  script: gradle test --tests "app.mock*"
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle
+
+smoke:
+  stage: test
+  script: gradle test --tests "app.smoke*"
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle
+
+unit:
+  stage: test
+  script: gradle test --tests "app.unit*"
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
