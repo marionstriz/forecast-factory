@@ -2,10 +2,16 @@ package app.helpers;
 
 import app.io.FileReader;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserInputUtils {
+
+    public static List<String> getCitiesFromInput(String cities){
+        // takes in filecontents, splits and returns list
+        return null;
+    }
 
     public static String getFileContentsOrInput(String input) {
         if(!isFile(input)){
