@@ -17,12 +17,13 @@ public class FileReaderTests {
     private static WeatherReportMachine weatherReportMachine;
     private static CityWeatherReport regFileCityReport;
     private static CityWeatherReport weirdFileCityReport;
-    private static final Path pathToDataDir = Path.of("..", "data");
+    private static Path pathToDataDir;
 
     @BeforeAll
     public static void initialize() {
         fileReader = new FileReader();
         weatherReportMachine = new WeatherReportMachine();
+        pathToDataDir = Path.of("src", "test", "java", "app", "data");
 
         String normalFile = "city.txt";
         String weirdFile = "weird-city.txt";
@@ -51,7 +52,7 @@ public class FileReaderTests {
 
     @Test
     public void WhenGivenFileWithValidCity_ShouldCreateReportWith_CorrectCityName() {
-        String expectedName = "Frankkfurt";
+        String expectedName = "Frankfurt am Main";
         assertThat(regFileCityReport.getMainDetails().getCity()).isEqualTo(expectedName);
     }
 
@@ -63,7 +64,7 @@ public class FileReaderTests {
 
     @Test
     public void WhenGivenFileWithValidCity_ShouldCreateReportWith_CorrectCoordinates() {
-        String expectedCoords = "50.11,8.68";
+        String expectedCoords = "50.12,8.68";
         assertThat(regFileCityReport.getMainDetails().getCoordinates()).isEqualTo(expectedCoords);
     }
 

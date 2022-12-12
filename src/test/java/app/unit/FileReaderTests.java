@@ -15,11 +15,12 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 public class FileReaderTests {
 
     private static FileReader fileReader;
-    private static final Path pathToDataDir = Path.of("..", "data");
+    private static Path pathToDataDir;
 
     @BeforeAll
     public static void initialize() {
         fileReader = new FileReader();
+        pathToDataDir = Path.of("src", "test", "java", "app", "data");
     }
 
     @ParameterizedTest
