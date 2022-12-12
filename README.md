@@ -39,8 +39,7 @@ gradlew test
 
 ### Build the Application
 
-Building the app creates the compiled class files (in `build/classes`), as well as packaging the
-application and creating a jar file (in `build/libs`).
+Building the app creates the compiled class files (in `build/classes`).
 
 Tests are also run as a part of the build.
 
@@ -54,6 +53,13 @@ gradlew build
 
 ### Run the Application
 
+There are two options to run the application:
+- input as city name - takes a single city and outputs `json` report to `reports` directory
+in the app's source folder
+- input as absolute or relative file path - takes a file name (only `txt` supported)
+which should include one city per line and outputs one `json` file per city to `reports`
+directory
+
 #### Using Gradle
 The app can be run using Gradle, in which case running the `build` command
 before-hand is not necessary - build is performed anyway when this command is run.
@@ -62,31 +68,34 @@ Application output is shown after the `Task :run` line.
 
 ```shell
 # Windows:
-gradlew run --args={your city here}
+gradlew run --args={your city or filepath here}
 
 # Unix:
-./gradlew run --args={your city here}
+./gradlew run --args={your city or filepath here}
 
 # Example:
 # ./gradlew run --args=tallinn
 ```
 
 #### Using .jar Packaged Application
-After running the Gradle [build](#build-the-application)  command, the app can also be run using
-the generated `jar` file. This file is placed by default in the `build/libs` folder,
+To generate a fat `jar` containing all dependencies, run the Gradle `fatJar` command. 
+This file is placed by default in the `build/libs` folder,
 but can be safely moved wherever is convenient.
 ```shell
 # This command works when in app root folder and jar 
 # has not been moved - replace path as required
 
 # Windows:
-java -jar build\libs\weather-api-project.jar {your-city-here}
+gradlew fatJar
+java -jar build\libs\weather-api-project.jar {your city or filepath here}
 
 # Unix:
-java -jar build/libs/weather-api-project.jar {your-city-here}
+./gradlew fatJar
+java -jar build/libs/weather-api-project.jar {your city or filepath here}
 
 # Example:
 # java -jar build\libs\weather-api-project.jar tallinn
+# java -jar build\libs\weather-api-project.jar cities.txt
 ```
 
 

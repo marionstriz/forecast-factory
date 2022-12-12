@@ -32,8 +32,13 @@ application {
     mainClass = 'app.Main'
 }
 
-jar {
+task fatJar(type: Jar) {
+
     manifest {
         attributes 'Main-Class': 'app.Main'
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) })
+    with jar
 }

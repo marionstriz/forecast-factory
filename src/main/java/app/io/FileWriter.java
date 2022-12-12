@@ -40,6 +40,7 @@ public class FileWriter {
             throw new RuntimeException(
                     "Error writing file to " + destination);
         }
+        logger.info("Wrote report to file " + fileName);
     }
 
     private void checkReportsDirExistsOrCreate() {
