@@ -6,6 +6,8 @@ import app.io.FileWriter;
 import app.weather.WeatherReportMachine;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 public class Main {
 
     private static final Logger logger = Logger.getLogger(Main.class.getSimpleName());
@@ -16,21 +18,28 @@ public class Main {
             return;
         }
         String input = String.join(" ", args);
-        WeatherReportMachine machine = new WeatherReportMachine();
-        FileWriter writer = new FileWriter();
 
-        try {
-            String city = UserInputUtils.getFileContentsOrInput(input);
-            CityWeatherReport weatherReport = machine.getFullCityWeatherReport(city);
-
-            writer.writeReportFile(weatherReport);
-        } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage());
-        }
+        createReportsFromInput(input);
     }
 
     public static void createReportsFromInput(String input) {
-        //getCitiesFromInput
-        //for loop over cities to create reports and files
+        createReportsFromInputGivenPath(input, null);
+    }
+
+    public static void createReportsFromInputGivenPath(String input, String path) {
+        WeatherReportMachine machine = new WeatherReportMachine();
+        FileWriter writer = path == null ? new FileWriter() : new FileWriter(path);
+
+        List<String> cities = UserInputUtils.getCitiesFromInput(input);
+
+        for (String city : cities) {
+            try {
+                CityWeatherReport weatherReport = machine.getFullCityWeatherReport(city);
+
+                writer.writeReportFile(weatherReport);
+            } catch (IllegalArgumentException e) {
+                logger.error(e.getMessage());
+            }
+        }
     }
 }
