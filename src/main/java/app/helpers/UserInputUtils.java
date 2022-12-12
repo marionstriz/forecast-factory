@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 
 public class UserInputUtils {
 
-    public static List<String> getCitiesFromInput(String cities){
-        // takes in filecontents, splits and returns list
-        return null;
+    public static List<String> getCitiesFromInput(String input){
+        String cities = getFileContentsOrInput(input);
+        return List.of(cities.split("\n"));
     }
 
     public static String getFileContentsOrInput(String input) {
