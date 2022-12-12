@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import static app.helpers.UserInputUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,6 +16,7 @@ public class UserInputUtilsTests {
     private final String validExtensionFile = "city.txt";
     private final String invalidExtensionFile = "not-valid.csv";
     private final String notAFile = "not-a-file";
+
     private static final Path pathToDataDir = Path.of("src", "test", "java", "app", "data");
 
 
@@ -89,5 +91,29 @@ public class UserInputUtilsTests {
     @ValueSource(strings = {"", "  ", "\n"})
     public void givenBlankString_getFileContentsOrInput_ReturnsSameBlankString(String string) {
         assertThat(getFileContentsOrInput(string)).isEqualTo(string);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Tallinn",
+                            "Stockholm",
+                            "Helsinki",
+                            "Riga"})
+    public void givenStringWithSeveralCities_getCitiesFromInput_ShouldReturnCorrectList(String city){
+        String manyCities = "Tallinn\n" +
+                "Stockholm\n" +
+                "Helsinki\n" +
+                "Riga";
+        assertThat(getCitiesFromInput(manyCities)).contains(city);
+    }
+
+    @Test
+    public void givenStringWithOneCity_getCitiesFromInput_ReturnsAListWithOneCity(){
+        assertThat(getCitiesFromInput("Tartu").size()).isEqualTo(1);
+        assertThat(getCitiesFromInput("Tartu")).contains("Tartu");
+    }
+
+    @Test
+    public void givenEmptyString_getCitiesFromInput_ReturnsAListWithEmptyString(){
+        assertThat(getCitiesFromInput("")).isEqualTo(List.of(""));
     }
 }
