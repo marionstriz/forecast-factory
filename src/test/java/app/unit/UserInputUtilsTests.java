@@ -16,11 +16,11 @@ public class UserInputUtilsTests {
 
     @Test
     public void givenFileWithCorrectExtension_HasCorrectFileExtension_ReturnsTrue(){
-        assertThat(hasCorrectFileExtension(validExtensionFile)).isFalse();
+        assertThat(hasCorrectFileExtension(validExtensionFile)).isTrue();
     }
 
     @Test
-    public void givenFileWithWrongExtension_hHasCorrectFileExtension_ReturnsFalse(){
+    public void givenFileWithWrongExtension_hasCorrectFileExtension_ReturnsFalse(){
         assertThat(hasCorrectFileExtension(invalidExtensionFile)).isFalse();
     }
 
