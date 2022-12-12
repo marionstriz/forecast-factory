@@ -28,4 +28,9 @@ public class Main {
             logger.error(e.getMessage());
         }
     }
+
+    public static void createReportsFromInput(String input) {
+        //getCitiesFromInput
+        //for loop over cities to create reports and files
+    }
 }
