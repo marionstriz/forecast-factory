@@ -16,6 +16,8 @@ public class UserInputUtilsTests {
     private final String validExtensionFile = "city.txt";
     private final String invalidExtensionFile = "not-valid.csv";
     private final String notAFile = "not-a-file";
+    private final String manyCities = "many-cities.txt";
+    private final String emptyFile = "empty-file.txt";
 
     private static final Path pathToDataDir = Path.of("src", "test", "java", "app", "data");
 
@@ -99,21 +101,17 @@ public class UserInputUtilsTests {
                             "Helsinki",
                             "Riga"})
     public void givenStringWithSeveralCities_getCitiesFromInput_ShouldReturnCorrectList(String city){
-        String manyCities = "Tallinn\n" +
-                "Stockholm\n" +
-                "Helsinki\n" +
-                "Riga";
         assertThat(getCitiesFromInput(manyCities)).contains(city);
     }
 
     @Test
     public void givenStringWithOneCity_getCitiesFromInput_ReturnsAListWithOneCity(){
-        assertThat(getCitiesFromInput("Tartu").size()).isEqualTo(1);
-        assertThat(getCitiesFromInput("Tartu")).contains("Tartu");
+        assertThat(getCitiesFromInput(validExtensionFile)).hasSize(1);
+        assertThat(getCitiesFromInput(validExtensionFile)).contains("Frankfurt");
     }
 
     @Test
     public void givenEmptyString_getCitiesFromInput_ReturnsAListWithEmptyString(){
-        assertThat(getCitiesFromInput("")).isEqualTo(List.of(""));
+        assertThat(getCitiesFromInput(emptyFile)).isEqualTo(List.of(""));
     }
 }
