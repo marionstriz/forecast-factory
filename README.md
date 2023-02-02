@@ -1,15 +1,8 @@
 # Weather API Team Project
 
 A weather info application which gives the current weather and
-forecast data about any given city in `json` format.
-
-## Meet the Team
-#### Julia Ruzu  
-Kood: 201361IADB  
-Uni-ID: juruzu 
-#### Marion Claudia Striž  
-Kood: 206260IADB  
-Uni-ID: mastri
+forecast data about any given city in `json` format. This has been
+developed mainly for unit and integration testing practice purposes.
 
 ## Tech Stack
 Source code is written in Java 17.   
