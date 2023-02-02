@@ -10,15 +10,18 @@ Gradle is used for package management and building -
 all utilized packages are included in `build.gradle` file under dependencies.
 
 The app uses [OpenWeatherMap API](https://openweathermap.org/api) and
-requires and internet connection.
+requires and internet connection and a valid API key.
 
 ## Instructions
 
 To successfully do anything with this application, this repository
 needs to be cloned to your local machine.
 
-Using a command line tool, navigate to the app source catalog and run
-the relevant commands shown below.
+For setup, replace your OpenWeatherMap API key where requested in
+`src/main/java/app/api/WeatherApi`
+
+Using a command line tool, navigate to the app source catalog and
+run the relevant commands shown below.
 
 ### Run Tests
 

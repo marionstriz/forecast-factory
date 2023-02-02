@@ -14,7 +14,7 @@ import static com.sun.jersey.api.json.JSONConfiguration.FEATURE_POJO_MAPPING;
 public class WeatherApi {
 
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5";
-    private static final String API_KEY = "e23d88c1cc9bfd0f5580776f36688fbb";
+    private static final String API_KEY = "YOUR-API-KEY-HERE";
 
     private final Client client;
 
